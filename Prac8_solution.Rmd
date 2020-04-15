@@ -1,0 +1,257 @@
+---
+title: Introduction to distance sampling
+author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
+subtitle: Workshop, 04-15 May 2020
+date: Exercise 8. Covariates in the detection function
+output: 
+  html_document:
+    number_sections: yes
+    theme: flatly
+    highlight: tango
+    df_print: kable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(kableExtra)
+```
+
+<div class="alert  alert-success">
+  <strong>Solutions</strong> Covariates in the detection function
+</div>
+
+# Covariates in point transect detection functions: Amakihi
+
+```{r}
+library(Distance)
+data(amakihi)
+```
+
+```{r, fig.height=4}
+hist(amakihi$distance, xlab="Radial distances (m)", main="Amakihi point transect data.")
+```
+
+A truncation distance of 82.5 m was chosen by Marques *et al.* (2007). 
+
+Plots of the covariates were generated. Not surprisingly, `MAS` and `HAS` are correlated and so we need to be cautious of including them in the same model. 
+
+```{r, fig.height=8}
+# Plots of covariates
+par(mfrow=c(2,2))
+# Boxplots by obs
+boxplot(amakihi$distance~amakihi$OBs, xlab="Observer", ylab="Distance (m)")
+# Boxplots by hour after sunrise
+boxplot(amakihi$distance~amakihi$HAS, xlab="Hour", ylab="Distance (m)")
+# Plot of MAS vs distance (using dots)
+plot(x=amakihi$MAS, y=amakihi$distance, xlab="Minutes after sunrise",
+     ylab="Distance (m)", pch=20)
+# Plot of HAS vs MAS (using dots)
+plot(x=amakihi$HAS, y=amakihi$MAS, xlab="Hours after sunrise",
+     ylab="Minutes after sunrise", pch=20)
+```
+
+```{r}
+# Adjusting the raw data
+# Convert HAS to a factor
+amakihi$HAS <- factor(amakihi$HAS)
+# Set the reference level 
+amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
+amakihi$HAS <- relevel(amakihi$HAS, ref="5")
+```
+
+The re-scaling of `MAS` has converted it from a variable with values between -18 and 307 to values between -0.23 and 4.04. 
+
+```{r}
+# Rescale MAS 
+amakihi$MAS <- scale(amakihi$MAS)
+summary(amakihi$MAS)
+```
+
+The model selected by Marques *et al.* (2007) used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
+
+```{r, fig.height=4, message=FALSE, warning=FALSE}
+# Fit model selected by Marques et al (2007)
+conv <- convert_units("meter", NULL, "hectare")
+amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
+                      truncation=82.5)
+
+# Plot selected model
+plot(amak.hr.obs.mas, main="Model with OBs and MAS", pch=".", pdf=TRUE)
+```
+
+To see more sophisticated examples of plotting the detection function for the selected model, see the code accompanying Buckland *et al.* (2015) [Hawaiian Amakihi case study](https://synergy.st-andrews.ac.uk/ds-manda/#hawaiian-amakihi-case-study).
+
+# More MCDS with line transects: ETP dolphins (optional)
+
+We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.  
+
+```{r}
+data(ETP_Dolphin)
+head(ETP_Dolphin, n=3)
+# Check conversion units
+ETP_Dolphin_units
+```
+Notice that effort and perpendicular distances are both measured in nautical miles and that density is to be reported in animals per square nautical mile, so the conversation factor in this case is 1 and we do not represent it here.
+
+To obtain an overall impression of the data, it is useful to fit a histogram with many intervals. 
+
+```{r, fig.height=4}
+# Histogram of distances with lots of intervals
+hist(ETP_Dolphin$distance, nclass=50, xlab="Distance (nm)",
+     main="Tropical Pacific dolphin survey perpendicular distances")
+```
+
+The spikes in the histogram suggest that distances have been rounded to zero and possibly other values. To mitigate these problems, the distances could be binned although we do not do so in the analysis below. The distances have already been truncated at 5 nm and so we will not truncate distances further.
+
+```{r, fig.height=6}
+# Boxplots of distances against factor covariates
+par(mfrow=c(2,2))
+# Search method
+boxplot(ETP_Dolphin$distance~ETP_Dolphin$Search.method, xlab="Search method", 
+        ylab="Distance (nm)")
+# Cue 
+boxplot(ETP_Dolphin$distance~ETP_Dolphin$Cue.type, xlab="Cue", ylab="Distance (nm)")
+# Beaufort 
+boxplot(ETP_Dolphin$distance~ETP_Dolphin$Beauf.class, xlab="Beaufort class", 
+        ylab="Distance (nm)")
+# Month
+boxplot(ETP_Dolphin$distance~ETP_Dolphin$Month, xlab="Month", ylab="Distance (nm)")
+```
+
+To decide whether to fit a half normal or a hazard rate key function, each of these is tried in turn.
+
+```{r, message=FALSE}
+# Fit basic detection functions 
+# Half normal
+etp.hn <- ds(ETP_Dolphin, key="hn", adjustment=NULL)
+# Hazard rate
+etp.hr <- ds(ETP_Dolphin, key="hr", adjustment=NULL)
+# Compare these fits
+knitr::kable(as.data.frame(AIC(etp.hn, etp.hr))) %>%
+    kable_styling(bootstrap_options = "condensed", full_width = F)  
+```
+
+The AIC values suggest that hazard rate key function is preferable to the half normal and so this will be used as the key function in the MCDS models. Each covariate is introduced in turn. 
+
+```{r, message=FALSE}
+# Add covariates to hazard rate detection function
+# Search method (factor)
+etp.hr.search <- ds(ETP_Dolphin, key="hr", formula=~factor(Search.method))
+# Cue type (factor)
+etp.hr.cue <- ds(ETP_Dolphin, key="hr", formula=~factor(Cue.type))
+# Beaufort class (factor)
+etp.hr.bf <- ds(ETP_Dolphin, key="hr", formula=~factor(Beauf.class))
+# Month (factor)
+etp.hr.month <- ds(ETP_Dolphin, key="hr", formula=~factor(Month))
+
+# Compare models (using pretty printing)
+knitr::kable(summarize_ds_models(etp.hr, etp.hr.search, etp.hr.cue, etp.hr.bf, etp.hr.month),
+               caption="ETP dolphin model selection.", digits=3) %>%
+       kable_styling(bootstrap_options = "condensed", full_width = F)  
+```
+
+Based on the AIC, it seems as though the model including search method was preferable and we could continue the model selection process by looking at models with two covariates. However, before going on it is worth looking at the search method model in more detail. If we look at the detection function parameters for this model:
+
+```{r}
+# Look at detection function part of the model object
+etp.hr.search$ddf
+```
+
+we see that the estimated scale coefficient for search method 3 is substantially larger than the estimated scale coefficients for other methods. The effect this has on the detection function is clearly seen in the detection function plot.
+
+```{r, fig.height=4}
+# Plot search method detection function
+plot(etp.hr.search, pch=".")
+```
+
+Search method 3 indicated that the detection was from a helicopter and this detection function suggests that all dolphin schools out to 5 nm were being detected and so detection does not decrease as distance increases. One assumption of MCDS is that the perpendicular distance distributions of the covariate factor levels have the same shape and so it may be worth refitting the models but excluding the observations made by the helicopter.  
+
+# More MCDS with point transects: Savannah sparrow (optional)
+
+The question here was whether to include pasture as a covariate in the detection function. 
+
+```{r, fig.width=4, fig.height=4}
+# Savannah sparrow 1980
+data(Savannah_sparrow_1980)
+# Check data
+head(Savannah_sparrow_1980, n=3)
+# Histogram of distances with lots of bins
+hist(Savannah_sparrow_1980$distance, nclass=20, xlab="Distance (m)",
+     main="Savannah sparrow radial distances '80")
+conversion.factor <- convert_units("meter", NULL, "hectare")
+```
+
+A truncation distance of 55m was chosen. The half normal and hazard rate functions were tried in turn, allowing AIC selection of cosine adjustment terms, then pasture was included as a covariate in the detection function.
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+# Fit different detection functions, truncation at 55m
+# Half-normal 
+Savannah_sparrow_1980.hn <- ds(data=Savannah_sparrow_1980, key="hn", adjustment="cos", truncation=55,
+                 transect="point", convert.units=conversion.factor)
+# Hazard
+Savannah_sparrow_1980.hr <- ds(data=Savannah_sparrow_1980, key="hr", adjustment="cos", truncation=55,
+                 transect="point", convert.units=conversion.factor)
+
+# Half-normal with pasture covariate
+Savannah_sparrow_1980.hn.region <- ds(data=Savannah_sparrow_1980, key="hn", truncation=55,
+                        transect="point", convert.units=conversion.factor,
+                        formula=~Region.Label)
+# Hazard with pasture covariate
+Savannah_sparrow_1980.hr.region <- ds(data=Savannah_sparrow_1980, key="hr", truncation=55,
+                        transect="point", convert.units=conversion.factor,
+                        formula=~Region.Label)
+# Select between these models
+AIC(Savannah_sparrow_1980.hn, Savannah_sparrow_1980.hr, Savannah_sparrow_1980.hn.region, Savannah_sparrow_1980.hr.region)
+```
+
+The half normal model with pasture as a covariate had a marginally smaller AIC than the half normal model without pasture. The plots and estimates are shown below. 
+
+```{r, fig.cap="Note different PDF shapes caused by the pasture covariate."}
+# Plot results of selected model
+plot(Savannah_sparrow_1980.hn.region, pch=".", pdf=TRUE)
+```
+
+```{r}
+# Summarise results for selected model
+summary(Savannah_sparrow_1980.hn.region)
+```
+
+A similar process was conducted for the 1981 data: a truncation distance of 55m was again used.  
+
+```{r}
+# Savannah sparrow 1981
+data(Savannah_sparrow_1981)
+conversion.factor <- convert_units("meter", NULL, "hectare")
+```
+
+```{r, eval=T, message=FALSE, warning=FALSE}
+# Fit alternative models 
+# Half-normal detection function, truncation 55m 
+Savannah_sparrow_1981.hn <- ds(data=Savannah_sparrow_1981, key="hn", adjustment="cos", truncation=55,
+                 transect="point", convert.units=conversion.factor)
+# Hazard rate
+Savannah_sparrow_1981.hr <- ds(data=Savannah_sparrow_1981, key="hr", adjustment="cos", truncation=55,
+                 transect="point", convert.units=conversion.factor)
+# Half normal with pasture
+Savannah_sparrow_1981.hn.region <- ds(data=Savannah_sparrow_1981, key="hn", truncation=55,
+                        transect="point", convert.units=conversion.factor,
+                        formula=~Region.Label)
+# Hazard rate with pasture
+Savannah_sparrow_1981.hr.region <- ds(data=Savannah_sparrow_1981, key="hr", truncation=55,
+                        transect="point", convert.units=conversion.factor,
+                        formula=~Region.Label)
+# Compare models
+AIC(Savannah_sparrow_1981.hn, Savannah_sparrow_1981.hr, Savannah_sparrow_1981.hn.region, Savannah_sparrow_1981.hr.region)
+```
+
+For 1981, there was a clear preference for including pasture as a covariate in the detection function but little to choose from between the half normal and hazard rate key function. For comparability with 1980, the plots and results below are for the half normal model although AIC showed a slight preference for the hazard rate model. The differences in detection between pastures can easily be seen and this is reflected in the estimated densities (birds per hectare). 
+
+```{r, fig.height=4, fig.cap="Stronger influence of pasture covariate seen here."}
+# Plot results of selected model
+plot(Savannah_sparrow_1981.hn.region, pch=".", pdf=TRUE, main="1981 sparrows by pasture.")
+
+# Summary of results for selected model
+summary(Savannah_sparrow_1981.hn.region)
+```
+
+In these models, the detection functions have been fitted to all the detections within the study region (for each year). An alternative would be to fit separate detection functions within each pasture (specified in `Region.Label`), provided there are enough detections. This would allow different shape detection functions to be fitted in each pasture (providing this is a reasonable thing to do).
