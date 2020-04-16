@@ -1,0 +1,87 @@
+---
+title: Introduction to distance sampling
+author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
+subtitle: Workshop, 04-15 May 2020
+date: Exercise 8. Covariates in the detection function
+output: 
+  html_document:
+    number_sections: yes
+    theme: flatly
+    highlight: tango
+    df_print: kable
+---
+
+<div class="alert  alert-success">
+  <strong>Supplement</strong> Plotting function for factor covariates in the detection function.
+</div>
+
+```{r echo=FALSE}
+library(kableExtra)
+```
+
+# How to visualise effects of covariates
+
+The third and final data set provided in Practical 8 working with covariates in the detection function was the Arapaho Wildlife Refuge Savannah sparrow data.  Recall the study in 1980 conducted surveys in three different pastures.  These pastures were recorded as strata in the data, so there are different `Region.Label` values for the pastures.  As a demonstration of the effect of covariate levels upon the detection function, I will fit a model using `Region.Label` as a covariate.
+
+```{r fitsparrow, message=FALSE}
+library(Distance)
+conversion.factor <- convert_units("meter", NULL, "hectare")
+data(Savannah_sparrow_1980)
+sparrow80.hn.region <- ds(data=Savannah_sparrow_1980, key="hn", truncation=55,
+                          transect="point", convert.units=conversion.factor,
+                          formula=~Region.Label)
+```                          
+                          
+Having fitted a detection function with a covariate for different pastures, it would be nice to see the consequence of the different levels of the factor covariate upon the shape of the detection function.  Below is a function designed to do just this.  Note this function is limited to use only with factor covariates in the detection function.                          
+                          
+```{r thefunction}
+plot.with.covariates <- function(dsobject, 
+                                 plottitle) {
+  #   Purpose: plot detection function for each level of factor covariate
+  #   Input:   object of class ds produced by ds(),
+  #            title for plot in quotes
+  #   Output:  plot, table of coefficients 
+  #   Author:  Rexstad, February 2020
+  #   Notes:   makes use of function detfct() to do the work.
+  stopifnot(class(dsobject)=="dsmodel",
+            is.character(plottitle))
+  myobject <- dsobject$ddf$ds$aux$ddfobj
+  truncation <- dsobject$ddf$meta.data$width
+  mycovariate <- myobject$xmat[,2]  # position in matrix when only a single covariate
+  covar.levels <- length(unique(mycovariate))
+  dists <- seq(from=0, to=truncation, length.out = 100)
+  xx <- matrix(data=NA, nrow=length(dists), ncol = covar.levels)
+  this.dist <- 0
+  for (i in dists) {
+    this.dist <- this.dist + 1
+    xx[this.dist, ] <- unique(detfct(i, myobject))
+  }
+  
+  plot(dists, xx[,1], type='l', lty=1, ylim=c(0,1),
+       xlab="Distance (m)", ylab="Detection probability", 
+       main=plottitle, sub="Detection function for levels of factor covariate")
+  for (more.levels in 2:covar.levels) {
+    lines(dists, xx[,more.levels], type="l", lty=more.levels)
+  }
+  legend("topright", legend=attr(myobject$scale$dm, "dimnames")[[2]],
+         lty=seq(1:covar.levels), title="Covariate levels")
+  coef.tab <- round(summary(dsobject)$ds$coeff$key.scale, 3)
+  return(coef.tab)
+}
+```
+
+Given a `dsmodel` object and the plotting function; we can produce the plot.  This is a bit awkward, because being point transect data, the probability density function should be plotted rather than the detection function.  Nevertheless, this demonstrates the change in detection function shape induced by the levels of the covariate.
+
+```{r theplot, fig.height=5, fig.cap="Plot produced by `plot.with.covariates`"}
+coef.tab <- plot.with.covariates(sparrow80.hn.region,
+                     "Savannah sparrow point transects 1980")
+```
+# Comparing visualisation with parameter estimates
+
+```{r printtable, echo=FALSE}
+knitr::kable(coef.tab, caption="Coefficients and standard errors from detection function fit.") %>%
+  kable_styling(full_width=FALSE)
+  
+```
+
+On the log scale (used in model fitting), we see that the *base* covariate level is Pasture 1.  The detection function is somewhat smaller for Pasture 2 than for Pasture 1 (sign of coefficient 2 is negative).  However, detectability in Pasture 3 is nearly identical to detectability in Pasture 3 (note the standard error of the coefficient for Pasture 3 is larger in absolute value than the coefficient itself, indicating the non-significance of the coefficient for Pasture 3).
