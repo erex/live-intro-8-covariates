@@ -13,6 +13,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(knitr)
 library(kableExtra)
 ```
 
@@ -79,7 +80,58 @@ amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, con
 plot(amak.hr.obs.mas, main="Model with OBs and MAS", pch=".", pdf=TRUE)
 ```
 
+<div class="alert alert-danger">
+  <strong>Cautionary tale</strong> A second round of model criticism
+</div>
+
+
+The model chosen by Marques et al. (2007) for making inference included minutes after sunrise (MAS) and observer (OBS) as covariates in the detection function.  Did that model produce  estimates of detection probability that were small for some detections?  Recall, because we are using a Horwitz-Thompson-like estimator, our estimates of abundance are quite sensitive to detections with small values of $\widehat{P_a(z_i)}$.  Detections with small $\widehat{P_a(z_i)}$ can have quite large impacts upon population estimates.  
+
+A new function in the most recent version of the `Distance` package, permits examination of the distribution of the $\widehat{P_a(z_i)}$ so we can assess whether this analysis guideline is violated:
+
+> consider reducing the trunction distance if more than 5\% of the $\widehat{P_a(z_i)}$ are <  0.2, or if any are less than 0.1
+
+```{r distp, eval=FALSE}
+p_dist_table(amak.hr.obs.mas, proportion = TRUE)
+```
+
+```{r distp2, echo=FALSE}
+kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
+      digits = 3,
+      caption="Distribution of $P_a(z_i)$ from preferred model when w=82.5") %>%
+  kable_styling(full_width=FALSE) %>%
+  row_spec(2, bold=TRUE, color="white", background="blue")
+```
+
+This suggests redoing the analysis with stronger truncation.  I'll repeat the model fitting (without showing the code) using 70m as the truncation distance.  What do we see when examining the distribution of the $\widehat{P_a(z_i)}$ with the more stringent truncation?
+
+```{r moretrunc, echo=FALSE}
+amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
+                      truncation=70)
+kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE),
+      digits = 3,
+      caption="Distribution of $P_a(z_i)$ from preferred model when w=70") %>%
+  kable_styling(full_width=FALSE) %>%
+  row_spec(2, bold=TRUE, color="white", background="blue")
+```
+
+*Should this much truncation cause concern for point estimates and precision?*
+
+The news that model criticism should start over with a new truncation distance would not be good news.  Concerns might also creek into your heads that removing data might affect the point estimates and possibly the precision.  In this case, moving the truncation distance from 82.5m to 70m removed only 1.5\% (19) detections, so it is unlikely that precision was affected.
+
+Regarding the effect upon the point estimates of amakihi density, let's take a step back.  If you were to examine the point and interval estimates for this data set from a number of detection function models, you would find the estimates are robust to model choice.  
+
+```{r estfigs, fig.cap="Density estimates for amakihi data set under a variety of detection function models and truncation distances.", echo=FALSE, fig.width=9, fig.height= 10}
+include_graphics("estimate-comparisons.png")
+```
+
+*My impression*
+
+For this data set, the effort expended in discriminating between models with one vs two covariates as well as the angst about truncation distances had **imperceptible effects** upon the survey-specific density estimates.  In fact, a model simply using survey replicate as a covariate produced largely the same density estimates.  Understanding the temporal dynamics of the amakihi population was not influenced by covariate modelling.
+
+<!--
 To see more sophisticated examples of plotting the detection function for the selected model, see the code accompanying Buckland *et al.* (2015) [Hawaiian Amakihi case study](https://synergy.st-andrews.ac.uk/ds-manda/#hawaiian-amakihi-case-study).
+-->
 
 # More MCDS with line transects: ETP dolphins (optional)
 
@@ -89,7 +141,7 @@ We have not provided a comprehensive analysis of these data but have highlighted
 data(ETP_Dolphin)
 head(ETP_Dolphin, n=3)
 # Check conversion units
-ETP_Dolphin_units
+ETP_Dolphin_units[,1:2]
 ```
 Notice that effort and perpendicular distances are both measured in nautical miles and that density is to be reported in animals per square nautical mile, so the conversation factor in this case is 1 and we do not represent it here.
 
