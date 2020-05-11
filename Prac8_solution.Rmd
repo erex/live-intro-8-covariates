@@ -117,7 +117,7 @@ kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE)
 
 *Should this much truncation cause concern for point estimates and precision?*
 
-The news that model criticism should start over with a new truncation distance would not be good news.  Concerns might also creek into your heads that removing data might affect the point estimates and possibly the precision.  In this case, moving the truncation distance from 82.5m to 70m removed only 1.5\% (19) detections, so it is unlikely that precision was affected.
+The news that model criticism should start over with a new truncation distance would not be good news.  Concerns might also creep into your heads that removing data might affect the point estimates and possibly the precision.  In this case, moving the truncation distance from 82.5m to 70m removed only 1.5\% (19) detections, so it is unlikely that precision was affected.
 
 Regarding the effect upon the point estimates of amakihi density, let's take a step back.  If you were to examine the point and interval estimates for this data set from a number of detection function models, you would find the estimates are robust to model choice.  
 
