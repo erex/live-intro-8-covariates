@@ -121,7 +121,7 @@ The news that model criticism should start over with a new truncation distance w
 
 Regarding the effect upon the point estimates of amakihi density, let's take a step back.  If you were to examine the point and interval estimates for this data set from a number of detection function models, you would find the estimates are robust to model choice.  
 
-```{r estfigs, fig.cap="Density estimates for amakihi data set under a variety of detection function models and truncation distances.", echo=FALSE, fig.width=9, fig.height= 10}
+```{r estfigs, fig.cap="Density estimates for amakihi data set under a variety of detection function models and truncation distances.", echo=FALSE, out.width="80%"}
 include_graphics("estimate-comparisons.png")
 ```
 
