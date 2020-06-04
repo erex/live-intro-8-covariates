@@ -1,7 +1,7 @@
 ---
 title: Introduction to distance sampling
 author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
-subtitle: Workshop, 04-15 May 2020
+subtitle: Workshop, 06-17 July 2020
 date: Exercise 8. Covariates in the detection function
 output: 
   html_document:
@@ -14,7 +14,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This exercise consists of three datasets of increasing difficulty.  The first problem, MCDS with point transects, is  complicated and (using the functionality available in `R`) also includes some basic exploratory analysis of the covariates. Problems 2 and 3 are optional but will take you deeper into the heart of understanding multiple covariates. 
+This exercise consists of three data sets of increasing difficulty.  The first problem, MCDS with point transects, is  complicated and (using the functionality available in `R`) also includes some basic exploratory analysis of the covariates. Problems 2 and 3 are optional but will take you deeper into the heart of understanding multiple covariates. 
 
 # Objectives
 
@@ -110,20 +110,6 @@ The next adjustment is to change the *reference* level of the *observer* and *ho
 # Set the reference level 
 amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
-```
-
-One final adjustment, and more subtle, is a transformation of the continuous covariate `MAS`. We are considering three possible covariates in our detection function: `OBs`, `HAS` and `MAS`. The first two variables, `OBs` and `HAS`, are both factor variables, and so, essentially, we can think of them as taking on values between 1 and 3 in the case of `OBS`, and 1 to 6 in the case of `HAS`.  However, `MAS` can take on values from -18 (detections before sunrise) to >300 and the disparity in scales of measure between `MAS` and the other candidate covariates can lead to difficulties in the performance of the optimizer fitting the detection functions in R. The solution to the difficulty is to scale `MAS` such that it is on a scale (approx. 1 to 5) comparable with the other covariates.
-
-The `scale()` function divides all the `MAS` measurements by the standard deviation (function `sd`) of those measurements accomplishes the desired compaction in the range of the `MAS` covariate without changing the shape of the distribution of `MAS` values. 
-
-```{r, echo=TRUE, eval=F}
-amakihi$MAS <- scale(amakihi$MAS)
-```
-
-Check what this command has done by looking at a summary of the adjusted MAS:
-
-```{r, echo=TRUE, eval=F}
-summary(amakihi$MAS)
 ```
 
 ### Candidate models

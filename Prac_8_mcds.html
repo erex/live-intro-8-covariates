@@ -439,14 +439,14 @@ summary {
 
 
 <h1 class="title toc-ignore">Introduction to distance sampling</h1>
-<h3 class="subtitle">Workshop, 04-15 May 2020</h3>
+<h3 class="subtitle">Workshop, 06-17 July 2020</h3>
 <h4 class="author">Centre for Research into Ecological and Environmental Modelling <strong>University of St Andrews</strong></h4>
 <h4 class="date">Exercise 8. Covariates in the detection function</h4>
 
 </div>
 
 
-<p>This exercise consists of three datasets of increasing difficulty. The first problem, MCDS with point transects, is complicated and (using the functionality available in <code>R</code>) also includes some basic exploratory analysis of the covariates. Problems 2 and 3 are optional but will take you deeper into the heart of understanding multiple covariates.</p>
+<p>This exercise consists of three data sets of increasing difficulty. The first problem, MCDS with point transects, is complicated and (using the functionality available in <code>R</code>) also includes some basic exploratory analysis of the covariates. Problems 2 and 3 are optional but will take you deeper into the heart of understanding multiple covariates.</p>
 <div id="objectives" class="section level1">
 <h1><span class="header-section-number">1</span> Objectives</h1>
 <p>The objectives of this exercise are to</p>
@@ -516,11 +516,6 @@ summary {
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Set the reference level </span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>amakihi<span class="op">$</span>OBs &lt;-<span class="st"> </span><span class="kw">relevel</span>(amakihi<span class="op">$</span>OBs, <span class="dt">ref=</span><span class="st">&quot;TKP&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3"></a>amakihi<span class="op">$</span>HAS &lt;-<span class="st"> </span><span class="kw">relevel</span>(amakihi<span class="op">$</span>HAS, <span class="dt">ref=</span><span class="st">&quot;5&quot;</span>)</span></code></pre></div>
-<p>One final adjustment, and more subtle, is a transformation of the continuous covariate <code>MAS</code>. We are considering three possible covariates in our detection function: <code>OBs</code>, <code>HAS</code> and <code>MAS</code>. The first two variables, <code>OBs</code> and <code>HAS</code>, are both factor variables, and so, essentially, we can think of them as taking on values between 1 and 3 in the case of <code>OBS</code>, and 1 to 6 in the case of <code>HAS</code>. However, <code>MAS</code> can take on values from -18 (detections before sunrise) to &gt;300 and the disparity in scales of measure between <code>MAS</code> and the other candidate covariates can lead to difficulties in the performance of the optimizer fitting the detection functions in R. The solution to the difficulty is to scale <code>MAS</code> such that it is on a scale (approx. 1 to 5) comparable with the other covariates.</p>
-<p>The <code>scale()</code> function divides all the <code>MAS</code> measurements by the standard deviation (function <code>sd</code>) of those measurements accomplishes the desired compaction in the range of the <code>MAS</code> covariate without changing the shape of the distribution of <code>MAS</code> values.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>amakihi<span class="op">$</span>MAS &lt;-<span class="st"> </span><span class="kw">scale</span>(amakihi<span class="op">$</span>MAS)</span></code></pre></div>
-<p>Check what this command has done by looking at a summary of the adjusted MAS:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">summary</span>(amakihi<span class="op">$</span>MAS)</span></code></pre></div>
 <div id="candidate-models" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Candidate models</h3>
 <p>With three potential covariates, there are 8 possible models for the detection function:</p>
@@ -536,23 +531,23 @@ summary {
 </ul>
 <p>Even without considering covariates there are also several possible key function/adjustment term combinations available: if all key function/covariate combinations are considered the number of potential models is large. Note that covariates are not allowed if a uniform key function is chosen and if covariate terms are included, adjustment terms are not allowed. Even with these restrictions, it is not best practice to take a scatter gun approach to detection function model fitting. Buckland et al. (2015) considered 13 combinations of key function/covariates. Here, we look at a subset of these.</p>
 <p>Fit a hazard rate model with no covariates or adjustment terms and make a note of the AIC. Note, that 10% of the largest distances are truncated - you may have decided on a different truncation distance.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>amak.hr &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>,</span>
-<span id="cb9-3"><a href="#cb9-3"></a>              <span class="dt">adjustment=</span><span class="ot">NULL</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>amak.hr &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>              <span class="dt">adjustment=</span><span class="ot">NULL</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
 <p>Make a note of the AIC for this model.</p>
 <p>Now fit a hazard rate model with <code>OBs</code> as a covariate in the detection function and make a note of the AIC. Has the AIC reduced by including a covariate?</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>amak.hr.obs &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">formula=</span><span class="op">~</span>OBs,</span>
-<span id="cb10-3"><a href="#cb10-3"></a>                  <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>amak.hr.obs &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">formula=</span><span class="op">~</span>OBs,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>                  <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
 <p>Fit a hazard rate model with <code>OBs</code> and <code>HAS</code> in the detection function:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>amak.hr.obs.has &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">formula=</span><span class="op">~</span>OBs<span class="op">+</span>HAS,</span>
-<span id="cb11-2"><a href="#cb11-2"></a>                      <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>amak.hr.obs.has &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">formula=</span><span class="op">~</span>OBs<span class="op">+</span>HAS,</span>
+<span id="cb9-2"><a href="#cb9-2"></a>                      <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>, <span class="dt">convert.units =</span> conversion.factor)</span></code></pre></div>
 <p>Try fitting other possible formula and decide which model is best in terms of AIC. To quickly compare AIC values from different models, use the <code>AIC</code> command as follows (note only models with the same truncation distance can be compared):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># AIC values</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">AIC</span>(amak.hr, amak.hr.obs, amak.hr.obs.has)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># AIC values</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">AIC</span>(amak.hr, amak.hr.obs, amak.hr.obs.has)</span></code></pre></div>
 <p>Another useful function is <code>summarize_ds_models</code> - this has the advantage of ordering the models by AIC (smallest to largest).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Compare models</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">summarize_ds_models</span>(amak.hr, amak.hr.obs, amak.hr.obs.has)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Compare models</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">summarize_ds_models</span>(amak.hr, amak.hr.obs, amak.hr.obs.has)</span></code></pre></div>
 <p>Once you have decided on a model, plot your selected detection function.</p>
 </div>
 </div>
@@ -580,8 +575,8 @@ summary {
 <div id="analysis" class="section level2">
 <h2><span class="header-section-number">3.1</span> Analysis</h2>
 <p>The data are available in the <code>Distance</code> package:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">data</span>(ETP_Dolphin)</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="kw">head</span>(ETP_Dolphin, <span class="dt">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">data</span>(ETP_Dolphin)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">head</span>(ETP_Dolphin, <span class="dt">n=</span><span class="dv">3</span>)</span></code></pre></div>
 <p>Start by running a set of conventional distance analyses. Are there any problems in the data and if so how might you mitigate them? (Hint - try dividing the histogram of distances into a large number of intervals.)</p>
 <p>As there are a number of potential covariates to be used in this example (i.e. search method, cue, Beaufort class and month), try fitting models with different covariates and combinations of the covariates. All of the covariates in this example are factor covariates except group size and because they have numeric codes, use the <code>factor</code> function to let <code>R</code> know to treat them as factors.</p>
 <p>Note that both distances and transect lengths were recorded in nautical miles and area in nautical miles squared and so the argument <code>convert_units</code> does not need to be specified.</p>
@@ -591,10 +586,10 @@ summary {
 <div id="more-mcds-with-point-transects-savannah-sparrow-optional" class="section level1">
 <h1><span class="header-section-number">4</span> More MCDS with point transects: Savannah sparrow (optional)</h1>
 <p>Point transect surveys were conducted in Arapaho National Wildlife Refuge, Colorado, USA, in 1980 and 1981 and this exercise concerns the data collected on Savannah sparrows. The study area was divided into smaller regions (called ‘pastures’). The data are available in the <code>Distance</code> package.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1980</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1981</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1980</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1981</span>)</span></code></pre></div>
 <p>Distances were recorded in metres and area in hectares.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span></code></pre></div>
 <p>For each data set,</p>
 <ol style="list-style-type: decimal">
 <li>consider an appropriate truncation distance,</li>

@@ -1,7 +1,7 @@
 ---
 title: Introduction to distance sampling
 author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
-subtitle: Workshop, 04-15 May 2020
+subtitle: Workshop, 06-17 July 2020
 date: Exercise 8. Covariates in the detection function
 output: 
   html_document:
@@ -58,14 +58,6 @@ amakihi$HAS <- factor(amakihi$HAS)
 # Set the reference level 
 amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
-```
-
-The re-scaling of `MAS` has converted it from a variable with values between -18 and 307 to values between -0.23 and 4.04. 
-
-```{r}
-# Rescale MAS 
-amakihi$MAS <- scale(amakihi$MAS)
-summary(amakihi$MAS)
 ```
 
 The model selected by Marques *et al.* (2007) used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
@@ -217,6 +209,20 @@ plot(etp.hr.search, pch=".")
 ```
 
 Search method 3 indicated that the detection was from a helicopter and this detection function suggests that all dolphin schools out to 5 nm were being detected and so detection does not decrease as distance increases. One assumption of MCDS is that the perpendicular distance distributions of the covariate factor levels have the same shape and so it may be worth refitting the models but excluding the observations made by the helicopter.  
+
+## Colourful plot noting effect of cue type
+
+Just an example of using the function `add_df_covar_line` to visually explore consequences of covariates on the detection function.  A *regular* call to `plot()` is first used to produce the histogram and average detection function line; subsequent calls to the new function with different values of the covariate of interest completes the plot.
+
+```{r, colourful, fig.height=4, fig.cap="Detection function with cue type as covariate."}
+plot(etp.hr.cue, main="ETP dolphin survey")
+add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=1), col='red', lwd=2, lty=1)
+add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=2), col='blue', lwd=2, lty=1)
+add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=3), col='green', lwd=2, lty=1)
+add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=4), col='purple', lwd=2, lty=1)
+legend("topright", legend=c("Birds","Splashes","Unspecified","Floating objects"),
+       col=c("red", "blue", "green", "purple"), lwd=2, title = "Cue type")
+```
 
 # More MCDS with point transects: Savannah sparrow (optional)
 

@@ -1,7 +1,7 @@
 ---
 title: Introduction to distance sampling
 author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
-subtitle: Workshop, 04-15 May 2020
+subtitle: Workshop, 06-17 July 2020
 date: Exercise 8. Covariates in the detection function
 output: 
   html_document:
@@ -46,7 +46,7 @@ Here animals occur in small herds.  The distribution of herd size is Poisson wit
 
 ```{r fig-nocap-margin-first, fig.width=4, fig.height=4, echo=FALSE}
 group.size <- rtpois(1000,lambda = 10)
-hist(group.size)
+hist(group.size, xlab="Group size")
 ```
 
 You can see it is very rare for herds to exceed a size of twice the mean.
@@ -73,7 +73,7 @@ size.cov <- make.simulation(reps=150, region=eg.region, design=transects,
                             ddf.analyses.list=make.ddf.analysis.list(dsmodel=list(~cds(key="hn",
                                                                                     formula=~size)),truncation=80))
 size.cov.sim <- run(size.cov, run.parallel = TRUE)
-hist(size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate")
+hist(size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate", xlab="Group size")
 indiv <- size.cov.sim@results$individuals$N[1,1:6,151]
 ```
 
@@ -95,11 +95,11 @@ no.size.cov <- make.simulation(reps=150, region=eg.region,
                                ddf.analyses.list=make.ddf.analysis.list(dsmodel=list(~cds(key="hn",
                                                                                     formula=~1)),truncation=80))
 no.size.sim <- run(size.cov, run.parallel = TRUE)
-hist(no.size.sim@results$expected.size[1,1,1:150], main="Computed average group size\nNo covariate")
+hist(no.size.sim@results$expected.size[1,1,1:150], main="Computed average group size\nNo covariate", xlab="Group size")
 nosize.indiv <- no.size.sim@results$individuals$N[1,1:6,151]
 ```
 
-The distribution of computed average groups sizes is shown at right.  We would expect an overestimate of mean group size because small groups at large distances are missing from our sample; but that effect is small in this instance. As a consequence, the average $\hat{N}_{indiv}$ across all simulations is `r round(nosize.indiv[1],2)`.
+The distribution of computed average groups sizes is shown above.  We would expect an overestimate of mean group size because small groups at large distances are missing from our sample; but that effect is small in this instance. As a consequence, the average $\hat{N}_{indiv}$ across all simulations is `r round(nosize.indiv[1],2)`.
 
 # Example 2: Possible dolphin pods or seabird rafts
 
@@ -141,11 +141,11 @@ scatter.smooth(my.survey$distance, my.survey$size)
 ## Analysis with covariate
 
 ```{r, echo=FALSE, fig.margin=TRUE}
-hist(tail.size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate")
+hist(tail.size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate", xlab="Group size")
 abline(v=exp(ml+sl^2/2), lty=3)
 ```
 
-When including `size` as a covariate, estimates of average group size are not affected (figure in right margin). Likewise, mean $\hat{N}_{indiv}$ is effectively unbiased: `r round(tail.indiv[1], 2)`.
+When including `size` as a covariate, estimates of average group size are not affected (figure above). Likewise, mean $\hat{N}_{indiv}$ is effectively unbiased: `r round(tail.indiv[1], 2)`.
 
 ## Analysis without the covariate
 
@@ -156,7 +156,7 @@ tail.size.NOcov <- make.simulation(reps=150, region=eg.region, design=transects,
                                                                                     formula=~1)),truncation=80))
 tail.size.NOcov.sim <- run(tail.size.NOcov, run.parallel = TRUE)
 tail.indiv.NO <- tail.size.NOcov.sim@results$individuals$N[1,1:6,151]
-hist(tail.size.NOcov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nNo covariate")
+hist(tail.size.NOcov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nNo covariate", xlab="Group size")
 abline(v=exp(ml+sl^2/2), lty=3)
 ```
 
@@ -165,7 +165,8 @@ Now mean $\hat{N}_{indiv}$ is **considerably biased**: `r round(tail.indiv.NO[1]
 
 ```{r, echo=FALSE}
 hist(tail.size.NOcov.sim@results$individuals$N[1,1,1:150],
-     main="Estimates of abundance without size covariate")
+     main="Estimates of abundance without size covariate", xlab="Abundance estimate",
+     sub="Dotted vertical line is true value")
 abline(v=exp(ml+sl^2/2)*200, lty=3)
 ```
 
