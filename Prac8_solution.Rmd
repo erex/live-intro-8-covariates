@@ -62,14 +62,37 @@ amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 
 The model selected by Marques *et al.* (2007) used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
 
-```{r, fig.height=4, message=FALSE, warning=FALSE}
+```{r, fig.height=5, message=FALSE, warning=FALSE}
 # Fit model selected by Marques et al (2007)
 conv <- convert_units("meter", NULL, "hectare")
 amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
                       truncation=82.5)
 
 # Plot selected model
-plot(amak.hr.obs.mas, main="Model with OBs and MAS", pch=".", pdf=TRUE)
+
+plot(amak.hr.obs.mas, showpoints=FALSE, main="Amakihi Observer and Minutes")
+sfzero <- data.frame(OBs="SGF", MAS=0)
+sf180 <- data.frame(OBs="SGF", MAS=180)
+t1zero <- data.frame(OBs="TJS", MAS=0)
+t1180 <- data.frame(OBs="TJS", MAS=180)
+t2zero <- data.frame(OBs="TKP", MAS=0)
+t2180 <- data.frame(OBs="TKP", MAS=180)
+
+add_df_covar_line(amak.hr.obs.mas, data=sfzero, lty=1, lwd=2,col="blue")
+add_df_covar_line(amak.hr.obs.mas, data=sf180, lty=2, lwd=2,col="blue")
+add_df_covar_line(amak.hr.obs.mas, data=t1zero, lty=1,lwd=2,col="red")
+add_df_covar_line(amak.hr.obs.mas, data=t1180, lty=2, lwd=2,col="red")
+add_df_covar_line(amak.hr.obs.mas, data=t2zero, lty=1,lwd=2,col="green")
+add_df_covar_line(amak.hr.obs.mas, data=t2180, lty=2, lwd=2,col="green")
+
+legend("topright", legend=c("SF, minutes=0",
+                            "SF, minutes=180",
+                            "TS, minutes=0",
+                            "TS, minutes=180",
+                            "TP, minutes=0",
+                            "TP, minutes=180"),
+       title="Covariate combination: observer and minutes",
+       lty=rep(c(1,2),times=3), lwd=2, col=rep(c("blue","red","green"), each=2))
 ```
 
 <div class="alert alert-danger">
@@ -215,7 +238,7 @@ Search method 3 indicated that the detection was from a helicopter and this dete
 Just an example of using the function `add_df_covar_line` to visually explore consequences of covariates on the detection function.  A *regular* call to `plot()` is first used to produce the histogram and average detection function line; subsequent calls to the new function with different values of the covariate of interest completes the plot.
 
 ```{r, colourful, fig.height=4, fig.cap="Detection function with cue type as covariate."}
-plot(etp.hr.cue, main="ETP dolphin survey")
+plot(etp.hr.cue, main="ETP dolphin survey", showpoints=FALSE)
 add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=1), col='red', lwd=2, lty=1)
 add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=2), col='blue', lwd=2, lty=1)
 add_df_covar_line(etp.hr.cue, data = data.frame(Cue.type=3), col='green', lwd=2, lty=1)
@@ -304,10 +327,28 @@ AIC(Savannah_sparrow_1981.hn, Savannah_sparrow_1981.hr, Savannah_sparrow_1981.hn
 
 For 1981, there was a clear preference for including pasture as a covariate in the detection function but little to choose from between the half normal and hazard rate key function. For comparability with 1980, the plots and results below are for the half normal model although AIC showed a slight preference for the hazard rate model. The differences in detection between pastures can easily be seen and this is reflected in the estimated densities (birds per hectare). 
 
-```{r, fig.height=4, fig.cap="Stronger influence of pasture covariate seen here."}
-# Plot results of selected model
-plot(Savannah_sparrow_1981.hn.region, pch=".", pdf=TRUE, main="1981 sparrows by pasture.")
-
+```{r, fig.height=6, fig.width=8, fig.cap="Stronger influence of pasture covariate seen here."}
+pastures <- unique(Savannah_sparrow_1981$Region.Label)
+plot(Savannah_sparrow_1981.hn.region, showpoints=FALSE, 
+     main="Savannah sparrows with pasture covariate")
+k <- 1
+for (i in pastures) {
+  k <- k+1
+  add_df_covar_line(Savannah_sparrow_1981.hn.region, 
+                    data=data.frame(Region.Label=as.character(i)),
+                    lty=1, col=k, lwd=3)
+}
+legend("topright", legend=tolower(as.character(pastures)), 
+       col=2:k, lwd=2, title = "Pastures")
+text(32,0.72, cex=0.9, pos=4,
+     expression(widehat(sigma[p])==plain(exp)(widehat(beta[0]) + widehat(beta[1]) %.% p[1] + widehat(beta[2]) %.% p[2] + widehat(beta[3]) %.% p[3])))
+library(plotrix)
+parms <- data.frame(est=c(2.944, 0.736, 0.166, 0.271),
+                    se=c(0.111, 0.373, 0.153, 0.179))
+rownames(parms) <- c("b0", "b1", "b2", "b3")
+addtable2plot(31, 0.83, parms, bty="o",
+              display.rownames=TRUE,hlines=TRUE, cex=0.8,
+              xpad=0.4, vlines=FALSE,title="Parameter estimates")
 # Summary of results for selected model
 summary(Savannah_sparrow_1981.hn.region)
 ```
