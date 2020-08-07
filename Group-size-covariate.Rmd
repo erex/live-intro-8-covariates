@@ -1,14 +1,10 @@
 ---
 title: Introduction to distance sampling
-author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
-subtitle: Workshop, 06-17 July 2020
-date: Exercise 8. Covariates in the detection function
+author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
+date: Exercise 8. Covariates in the detection function <br> September 2020
 output: 
-  html_document:
-    number_sections: yes
-    theme: flatly
+  rmdformats::readthedown:
     highlight: tango
-    df_print: kable
 ---
 
 <div class="alert  alert-success">
@@ -44,7 +40,7 @@ a.covariate <- ds(my.data, transect="line", key="hn", formula=~size)
 
 Here animals occur in small herds.  The distribution of herd size is Poisson with a mean herd size of 10.
 
-```{r fig-nocap-margin-first, fig.width=4, fig.height=4, echo=FALSE}
+```{r fig-nocap-margin-first, fig.width=8, echo=FALSE}
 group.size <- rtpois(1000,lambda = 10)
 hist(group.size, xlab="Group size")
 ```
@@ -73,8 +69,6 @@ size.cov <- make.simulation(reps=150, region=eg.region, design=transects,
                             ddf.analyses.list=make.ddf.analysis.list(dsmodel=list(~cds(key="hn",
                                                                                     formula=~size)),truncation=80))
 size.cov.sim <- run(size.cov, run.parallel = TRUE)
-hist(size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate", xlab="Group size")
-indiv <- size.cov.sim@results$individuals$N[1,1:6,151]
 ```
 
 Do we have the tell-tale sign of size bias--missing small groups at large distances?
@@ -85,17 +79,30 @@ my.survey <- data.for.distance(object = survey.design)
 scatter.smooth(my.survey$distance, my.survey$size)
 ```
 
+Perhaps small groups at large distances are missed; include group size in the detection function.
+
+## Analysis including group size covariate
+
+```{r small-with-covar, fig.width=8, echo=FALSE}
+hist(size.cov.sim@results$expected.size[1,1,1:150], main="Computed average group size\nGroup size covariate", xlab="Group size")
+abline(v=unname(covariate.list$size[[1]][[2]][1]), lwd=2, lty=3)
+indiv <- size.cov.sim@results$individuals$N[1,1:6,151]
+```
+
 The distribution of computed average group size centred on the true size of 10 and there was no problem with fitting a detection function.  The average over the simulations estimated number of individuals was `r round(indiv[1],2)`.
+
+## Analysis without group size covariate
 
 As a comparison, what happens if we don't include size as a covariate in our detection function?
 
-```{r nocov-10, echo=FALSE, message=FALSE}
+```{r nocov-10, echo=FALSE, message=FALSE, fig.width=8}
 no.size.cov <- make.simulation(reps=150, region=eg.region, 
                                design=transects, pop=pop.desc, det=detect,
                                ddf.analyses.list=make.ddf.analysis.list(dsmodel=list(~cds(key="hn",
                                                                                     formula=~1)),truncation=80))
 no.size.sim <- run(size.cov, run.parallel = TRUE)
 hist(no.size.sim@results$expected.size[1,1,1:150], main="Computed average group size\nNo covariate", xlab="Group size")
+abline(v=unname(covariate.list$size[[1]][[2]][1]), lwd=2, lty=3)
 nosize.indiv <- no.size.sim@results$individuals$N[1,1:6,151]
 ```
 

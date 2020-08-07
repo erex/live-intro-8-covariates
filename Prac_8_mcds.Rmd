@@ -1,20 +1,16 @@
 ---
 title: Introduction to distance sampling
-author: Centre for Research into Ecological and Environmental Modelling  **University of St Andrews**
-subtitle: Workshop, 06-17 July 2020
-date: Exercise 8. Covariates in the detection function
+author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
+date: Exercise 8. Covariates in the detection function <br> September 2020
 output: 
-  html_document:
-    number_sections: yes
-    theme: flatly
+  rmdformats::readthedown:
     highlight: tango
-    df_print: kable
 ---
 ```{r, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This exercise consists of three data sets of increasing difficulty.  The first problem, MCDS with point transects, is  complicated and (using the functionality available in `R`) also includes some basic exploratory analysis of the covariates. Problems 2 and 3 are optional but will take you deeper into the heart of understanding multiple covariates. 
+This exercise consists of three data sets of increasing difficulty.  The first problem, MCDS with point transects, is complicated and (using the functionality available in `R`) also includes some basic exploratory analysis of the covariates. Section [2](#more-mcds-with-line-transects-etp-dolphins) and [3](#more-mcds-with-point-transects-savannah-sparrow) are optional but will take you deeper into the heart of understanding multiple covariates. 
 
 # Objectives
 
@@ -52,7 +48,7 @@ These data include:
 Note that the `Area` column is always zero, hence, detection functions can be fitted to the data, but bird abundance cannot be estimated. The covariates to be considered for possible inclusion into the detection function are `OBs`, `MAS` and `HAS`. 
 
 
-### Exploratory data analysis
+## Exploratory data analysis
 
 It is important to gain an understanding of the data prior to fitting detection functions (Buckland *et al.* 2015). With this in mind, preliminary analysis of distance sampling data involves:
 
@@ -112,7 +108,7 @@ amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 ```
 
-### Candidate models
+## Candidate models
 
 With three potential covariates, there are 8 possible models for the detection function:
 
@@ -168,7 +164,7 @@ summarize_ds_models(amak.hr, amak.hr.obs, amak.hr.obs.has)
 
 Once you have decided on a model, plot your selected detection function. 
 
-# More MCDS with line transects: ETP dolphins (optional)
+# More MCDS with line transects: ETP dolphins
 
 In this problem we have a sample of Eastern Tropical Pacific (ETP) spotted dolphin sightings data, collected by observers placed on board tuna vessels (the data were kindly made available by the Inter-American Tropical Tuna Commission - IATTC). In the ETP, schools of yellow fin tuna commonly occur with schools (or groups) of dolphins, and so vessels fishing for tuna often search for dolphins in the hopes of also locating tuna. For each dolphin school detected by the tuna vessels, the observer recorded the species, sighting angle and distance (later converted to perpendicular distance and truncated at 5 nautical miles), school size and a number of covariates associated with each detected school. Many of these covariates potentially affect the detection function, as they reflect how the search was being carried out.
 
@@ -207,9 +203,9 @@ As there are a number of potential covariates to be used in this example (i.e. s
 
 Note that both distances and transect lengths were recorded in nautical miles and area in nautical miles squared and so the argument `convert_units` does not need to be specified. 
 
-Keep in mind that this is a large dataset (> 1000 observations), and hence estimation may take a while. You will likely end up with quite a few models as there are several potential covariates and no 'right' answers. Discuss your choice of final model (or models) with your neighbours - did you make the same choices?
+Keep in mind that this is a large dataset (> 1000 observations), and hence estimation may take a while. You will likely end up with quite a few models as there are several potential covariates and no 'right' answers. Discuss your choice of final model (or models) with your colleagues - did you make the same choices?
 
-# More MCDS with point transects: Savannah sparrow (optional)
+# More MCDS with point transects: Savannah sparrow
 
 Point transect surveys were conducted in Arapaho National Wildlife Refuge, Colorado, USA, in 1980 and 1981 and this exercise concerns the data collected on Savannah sparrows. The study area was divided into smaller regions (called 'pastures'). The data are available in the `Distance` package.
 
@@ -237,9 +233,9 @@ What would be an alternative to including pasture as a covariate in the detectio
 
 # References
 
-Buckland ST, Rexstad E, Marques TA and Oedekoven CS (2015) Distance sampling: methods and applications. Springer
+Buckland ST, Rexstad E, Marques TA and Oedekoven CS. (2015) Distance sampling: methods and applications. Springer
 
-Knopf FL, Sedgwick JA, and Cannon RW. (1988) Guild structure of a riparian avifauna relative to seasonal cattle grazing. Journal of Wildlife Management 52:280–290.
+Knopf FL, Sedgwick JA, and Cannon RW. (1988) Guild structure of a riparian avifauna relative to seasonal cattle grazing. Journal of Wildlife Management 52:280–290. https://doi.org/10.2307/3801235
 
-Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243
+Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243. https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2
 

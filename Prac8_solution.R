@@ -1,19 +1,19 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(knitr)
 library(kableExtra)
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 library(Distance)
 data(amakihi)
 
 
-## ---- fig.height=4-------------------------------------------------------
+## ---- fig.height=4--------------------------------------------------------------
 hist(amakihi$distance, xlab="Radial distances (m)", main="Amakihi point transect data.")
 
 
-## ---- fig.height=8-------------------------------------------------------
+## ---- fig.height=8--------------------------------------------------------------
 # Plots of covariates
 par(mfrow=c(2,2))
 # Boxplots by obs
@@ -28,7 +28,7 @@ plot(x=amakihi$HAS, y=amakihi$MAS, xlab="Hours after sunrise",
      ylab="Minutes after sunrise", pch=20)
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 # Adjusting the raw data
 # Convert HAS to a factor
 amakihi$HAS <- factor(amakihi$HAS)
@@ -37,7 +37,7 @@ amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 
 
-## ---- fig.height=5, message=FALSE, warning=FALSE-------------------------
+## ---- fig.height=5, message=FALSE, warning=FALSE--------------------------------
 # Fit model selected by Marques et al (2007)
 conv <- convert_units("meter", NULL, "hectare")
 amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
@@ -70,11 +70,11 @@ legend("topright", legend=c("SF, minutes=0",
        lty=rep(c(1,2),times=3), lwd=2, col=rep(c("blue","red","green"), each=2))
 
 
-## ----distp, eval=FALSE---------------------------------------------------
+## ----distp, eval=FALSE----------------------------------------------------------
 ## p_dist_table(amak.hr.obs.mas, proportion = TRUE)
 
 
-## ----distp2, echo=FALSE--------------------------------------------------
+## ----distp2, echo=FALSE---------------------------------------------------------
 kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
       digits = 3,
       caption="Distribution of $P_a(z_i)$ from preferred model when w=82.5") %>%
@@ -82,7 +82,7 @@ kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
   row_spec(2, bold=TRUE, color="white", background="blue")
 
 
-## ----moretrunc, echo=FALSE-----------------------------------------------
+## ----moretrunc, echo=FALSE------------------------------------------------------
 amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
                       truncation=70)
 kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE),
@@ -96,20 +96,20 @@ kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE)
 include_graphics("estimate-comparisons.png")
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 data(ETP_Dolphin)
 head(ETP_Dolphin, n=3)
 # Check conversion units
 ETP_Dolphin_units[,1:2]
 
 
-## ---- fig.height=4-------------------------------------------------------
+## ---- fig.height=4--------------------------------------------------------------
 # Histogram of distances with lots of intervals
 hist(ETP_Dolphin$distance, nclass=50, xlab="Distance (nm)",
      main="Tropical Pacific dolphin survey perpendicular distances")
 
 
-## ---- fig.height=6-------------------------------------------------------
+## ---- fig.height=6--------------------------------------------------------------
 # Boxplots of distances against factor covariates
 par(mfrow=c(2,2))
 # Search method
@@ -124,7 +124,7 @@ boxplot(ETP_Dolphin$distance~ETP_Dolphin$Beauf.class, xlab="Beaufort class",
 boxplot(ETP_Dolphin$distance~ETP_Dolphin$Month, xlab="Month", ylab="Distance (nm)")
 
 
-## ---- message=FALSE------------------------------------------------------
+## ---- message=FALSE-------------------------------------------------------------
 # Fit basic detection functions 
 # Half normal
 etp.hn <- ds(ETP_Dolphin, key="hn", adjustment=NULL)
@@ -135,7 +135,7 @@ knitr::kable(as.data.frame(AIC(etp.hn, etp.hr))) %>%
     kable_styling(bootstrap_options = "condensed", full_width = F)  
 
 
-## ---- message=FALSE------------------------------------------------------
+## ---- message=FALSE-------------------------------------------------------------
 # Add covariates to hazard rate detection function
 # Search method (factor)
 etp.hr.search <- ds(ETP_Dolphin, key="hr", formula=~factor(Search.method))
@@ -152,12 +152,12 @@ knitr::kable(summarize_ds_models(etp.hr, etp.hr.search, etp.hr.cue, etp.hr.bf, e
        kable_styling(bootstrap_options = "condensed", full_width = F)  
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 # Look at detection function part of the model object
 etp.hr.search$ddf
 
 
-## ---- fig.height=4-------------------------------------------------------
+## ---- fig.height=4--------------------------------------------------------------
 # Plot search method detection function
 plot(etp.hr.search, pch=".")
 
@@ -172,7 +172,7 @@ legend("topright", legend=c("Birds","Splashes","Unspecified","Floating objects")
        col=c("red", "blue", "green", "purple"), lwd=2, title = "Cue type")
 
 
-## ---- fig.width=4, fig.height=4------------------------------------------
+## ---- fig.width=4, fig.height=4-------------------------------------------------
 # Savannah sparrow 1980
 data(Savannah_sparrow_1980)
 # Check data
@@ -183,7 +183,7 @@ hist(Savannah_sparrow_1980$distance, nclass=20, xlab="Distance (m)",
 conversion.factor <- convert_units("meter", NULL, "hectare")
 
 
-## ---- eval=TRUE, message=FALSE, warning=FALSE----------------------------
+## ---- eval=TRUE, message=FALSE, warning=FALSE-----------------------------------
 # Fit different detection functions, truncation at 55m
 # Half-normal 
 Savannah_sparrow_1980.hn <- ds(data=Savannah_sparrow_1980, key="hn", adjustment="cos", truncation=55,
@@ -204,23 +204,23 @@ Savannah_sparrow_1980.hr.region <- ds(data=Savannah_sparrow_1980, key="hr", trun
 AIC(Savannah_sparrow_1980.hn, Savannah_sparrow_1980.hr, Savannah_sparrow_1980.hn.region, Savannah_sparrow_1980.hr.region)
 
 
-## ---- fig.cap="Note different PDF shapes caused by the pasture covariate."----
+## ---- fig.cap="Note different PDF shapes caused by the pasture covariate."------
 # Plot results of selected model
 plot(Savannah_sparrow_1980.hn.region, pch=".", pdf=TRUE)
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 # Summarise results for selected model
 summary(Savannah_sparrow_1980.hn.region)
 
 
-## ------------------------------------------------------------------------
+## -------------------------------------------------------------------------------
 # Savannah sparrow 1981
 data(Savannah_sparrow_1981)
 conversion.factor <- convert_units("meter", NULL, "hectare")
 
 
-## ---- eval=T, message=FALSE, warning=FALSE-------------------------------
+## ---- eval=T, message=FALSE, warning=FALSE--------------------------------------
 # Fit alternative models 
 # Half-normal detection function, truncation 55m 
 Savannah_sparrow_1981.hn <- ds(data=Savannah_sparrow_1981, key="hn", adjustment="cos", truncation=55,
