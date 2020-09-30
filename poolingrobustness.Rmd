@@ -1,0 +1,70 @@
+---
+title: "Introduction to distance sampling"
+author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
+date: Pooling robustness <br> September 2020
+output:
+  rmdformats::readthedown:
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What is pooling robustness?
+
+The following section is an excerpt from the monograph
+
+>Burnham, K., Anderson, D., & Laake, J. (1980). Estimation of Density from Line Transect Sampling of Biological Populations. Wildlife Monographs 72.  http://www.jstor.org/stable/3830641
+
+pages 45-47.
+
+The gist of the argument is this: if you could divide your survey into infinitely many small strata and estimate a detection function from the data in each stratum and sum the density estimates from each stratum... That sum will be equal to the density estimate obtained by fitting a single detection function to the data from all strata.  That condition is satisfied when we use models that estimate the detection function properly.
+
+The final paragraph of this excerpt begins to discuss the *Hayne estimator* which is an alternative way of estimating abundance from a distance sampling survey.  This excerpt notes that the *Hayne estimator* **fails to pass** the pooling robustness criterion.
+
+# Pooling Robustness
+
+Model robustness does not significantly reduce the number of possible candidate models. It is proposed that the next most important model criterion for $f(x)$ is that the estimator should be robust to variations in detection probability. The probability of detecting an object at any given perpendicular distance will vary according to numerous factors, both external and internal to the population being sampled. Examples of external factors are replicate lines, weather, light conditions, habitat, observer, and method of observation. Examples of internal factors are the species (if several species are being sampled), age, sex and size of animals, alertness of individuals or their varying conspicuousness, and the size of groups (when individuals are found in groups).
+
+Most line transect studies will extend over a period of time and probably include replicate lines. There may be more than 1 observer, and conditions are likely to vary during the sampling of a given line as well as between lines. For those reasons, and those given above, the detection curve will vary during the survey. Thus, one can think of the total data as arising from pooling subsets of the data that correspond to differing detection curves. The estimator of density should be robust to such pooling, i.e., it should not be affected by such variations in detection probability.
+
+As discussed above, line transect data are inexorably pooled over many factors that affect $g(x)$. Although some of the factors might be recognized in the field while sampling, many would not be, and stratifying the data to resolve the problem completely is therefore not possible. The criterion that the model for $f(x)$ be robust to variations in detection probability (for fixed x) will be called pooling robustness.
+
+To characterize pooling robustness and more rigorously define it, let there be $r$ strata (subsets) of the data, with sample sizes $n_{1}, \ldots, n_{r}$. Then, total sample size $n=n_{1}+\ldots+n_r$ Let one general model for $f(x)$ be assumed for all subsets and let the same estimator, $f(0),$ be used for all subsets as well as for the overall pooled data. Two cases must be considered: variations in detection probability are due to either internal or external reasons (as discussed above). In the case of internal variations, the population being sampled is conceptualized as having r classes (strata). For each class (which could be based on factors such as species, age, sex, group size), there is a detection curve and a corresponding probability density function $f_{j}(x) .$ For each class, let the true density be $D$; overall density is $D=D_{1}+$ $\cdots+D_{r}$ The corresponding estimator for each class is $\hat{D}_{1}=n_{n} f_{j}(0) / 2 L, j=1, \ldots, r$
+The overall stratified estimator of density, $D_{s},$ is the sum
+$$
+\hat{D}_{s}=\hat{D}_{1}+\hat{D}_{z}+\ldots+\hat{D}_{r}
+$$
+Let $D_{p}=n f(0) / 2 L$ be the pooled estimator of density. That is, $\mathrm{D}_{\mathrm{P}}$ is derived from Eq. (1.3) by computing $f(0)$ from the pooled data. The estimation method based on $\hat{f}(0)$ is defined to be pooling robust if $\hat{D}_S=\hat{D}_{P},$ i.e., if the overall estimator of density is identical whether data are analyzed pooled, or are analyzed stratified, and the results are then properly combined. Note that both $\hat{D}_{S}$ and $\hat{D}_{P}$ are estimating exactly the same parameter, $D=$ total density of sampled objects.
+
+As described above, $\hat{D}_S=\hat{D}_P$ is equivalent to the condition
+$$
+\begin{aligned}
+n f(0) &=n_{1} f_{1}(0)+\ldots+n_{t} f_{f}(0) \\
+&=\sum_{j=1}^{f} n_{1} f_{j}(0)
+\end{aligned}
+$$
+Consequently, Eq. (1.16) is now defined as being the criterion of pooling robustness for any estimator $\hat{f}(0)$. The proof that this also applies in the case of external variation in the detection curve is given below.
+
+Let sighting conditions change during the survey so that the total length of line L can be partitioned into segments (which might actually be separate lines) $\ell_{1}, \ldots, \ell_{\mathrm{r}}$,  such that $\mathrm{L}=\ell_{1}+\ldots+\ell_{\mathrm{r}}.$ Corresponding to those line lengths, the data are stratified into subsets (strata) of sizes $\mathrm{n}_{1}, \ldots, \mathrm{n}_{\mathrm{r}} .$ Estimates of density for each stratum are
+$$
+\hat{D}_{j}=\frac{n_{j} \hat{f}_{j}(0)}{2 \ell_{j}}
+$$
+To compute one combined estimate of density for all strata, one should take a weighted average of $\hat{D}_{1}, \ldots, \hat{D}_{r},$ weighting by $\ell_{3}$ (Burnham and Anderson 1976:329)
+$$
+\hat{D}_{s}=\frac{\sum_{j=1}^{r} \ell_{j} \hat{D}_{j}}{\sum_{j=1}^{r} \ell_{j}}=\frac{\sum_{j=1}^{r} n_{j} f_{j}(0)}{2 L}
+$$
+The criterion of pooling robustness ($\hat{D}_{s}$, $\hat{D}_{p})$ applied to the above result is equivalent to Eq. (1.16).
+
+Equation (1.16) defines the condition under which an estimator $f(0)$ is pooling robust. That is, if an estimator satisfies that simple condition, then the same point estimate of animal density will be obtained whether data are analyzed pooled or whether they are stratified, analyzed by strata, and the results properly combined into one overall estimate. As defined by Eq. (1.16), pooling robustness can be verified or disproved for any proposed estimator.
+
+If it were always possible to stratify the data and analyze each stratum separately, pooling robustness would not be needed. However, the factors that affect the sighting probabilities often cannot all be identified or measured and therefore the appropriate stratifications often cannot be done. Even when a relevant variable can be measured (e.g., group size, weather conditions, habitat type), many of the resultant strata will have sample sizes so small that it is not possible to compute an estimator of density for them. The practical use of stratification is thus quite limited in most line transect surveys.
+
+We maintain that all data, even after any feasible stratification, must be considered as pooled over many factors that affect the detection curve. It is concluded that estimators of density for line transect data should be both model robust and pooling robust.
+
+One caution regarding pooling robustness is necessary. Assume an area A is to be sampled by using a stratified design. Let the subareas (strata) have sizes $A_{1}$, $\ldots, \mathrm{A}_{\mathrm{r}} .$ Further assume that density differs by area and that one goal of the study is to estimate average density over the entire area of size A. The pooling robustness property will not produce an unbiased estimator unless the total line length is allocated in proportion to subareas. That is, the design should have $\ell_{1}=$ $LA_{i} / {A}.$ 
+
+The arguments that Eq. (1.16) defines pooling robustness have been presented here in greatly simplified form. Those arguments can be expanded to allow more realism, for example, with the simultaneous occurrence of internal and external variation. Also, we have dealt only with estimation based on perpendicular data; those same considerations, arguments, and criteria are applicable to estimators based on sighting distance and angles, for example, the well-known Hayne estimator (Hayne 1949). As Eberhardt (1978a:21) stated, the Hayne estimator is robust. However, we find that that robustness is guaranteed only if the sine of the sighting angle has a uniform probability distribution on the interval [0,1] Given that one critical assumption, the Hayne estimator can be shown mathematically to be model robust and pooling robust; but without that assumption it is not at all robust.
+
+There is another way the Hayne estimator (and its various modifications) fails to be robust. If even 1 recorded sighting distance, r, is very close to zero (relative to the rest of the sighting distance data), it has an enormous effect on the Hayne estimator. This is, of course, because one averages the reciprocals of the distances $r_{i}$ In the extreme, even one sighting distance of zero would lead to an arbitrarily large estimate of density. In practice, zero sighting distances (which implies a perpendicular distance of zero) must be discarded in applying Hayne's estimator (or its modifications). Zero perpendicular distances, however, cause no problem at all for any methods based on perpendicular distance data.
