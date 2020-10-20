@@ -1817,7 +1817,7 @@ $(document).ready(function () {
     
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
               <p class="author"><span class="glyphicon glyphicon-user"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
-                  <p class="date"><span class="glyphicon glyphicon-calendar"></span> Other model selection metrics <br> September 2020</p>
+                  <p class="date"><span class="glyphicon glyphicon-calendar"></span> Other model selection metrics <br> November 2020</p>
         </div>
 </div>
 
@@ -1850,7 +1850,7 @@ $(document).ready(function () {
 </div>
 <div id="demonstration-with-amakihi" class="section level1">
 <h1>Demonstration with amakihi</h1>
-<p>The amakihi analysis of Practical 8 (and Marques et al. (2007)) demonstrates the model ranking when using the differing model selection metrics.</p>
+<p>The amakihi analysis of Practical 8 (and Marques et al. <span class="citation">(2007)</span>) demonstrates the model ranking when using the differing model selection metrics.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(Distance)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">data</span>(amakihi)</span></code></pre></div>
 <p>A short function that computes all three model selection metrics for a given fitted <code>ds</code> object. A vector of all three scores is returned by the function.</p>
@@ -1863,7 +1863,7 @@ $(document).ready(function () {
 <span id="cb2-7"><a href="#cb2-7"></a>  BIC &lt;-<span class="st"> </span><span class="kw">AIC</span>(modelobj, <span class="dt">k =</span> <span class="kw">log</span>(nval))<span class="op">$</span>AIC</span>
 <span id="cb2-8"><a href="#cb2-8"></a>  <span class="kw">return</span>(<span class="kw">c</span>(AICval, AICc, BIC))</span>
 <span id="cb2-9"><a href="#cb2-9"></a>}</span></code></pre></div>
-<p>Fit a series of models to the amakihi data set, described in Marques et al. (2007). Call the <code>altmetric()</code> function for each of the fitted models, combine the resulting vectors into a data frame.</p>
+<p>Fit a series of models to the amakihi data set, described in Marques et al. <span class="citation">(2007)</span>. Call the <code>altmetric()</code> function for each of the fitted models, combine the resulting vectors into a data frame.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>conv &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>amak.hn &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hn&quot;</span>, <span class="dt">convert.units =</span> conv, <span class="dt">truncation=</span><span class="fl">82.5</span>)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>amak.hr &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">convert.units =</span> conv, <span class="dt">truncation=</span><span class="fl">82.5</span>)</span>
@@ -2172,9 +2172,13 @@ HN
 <p>There is no difference in model order whether AIC or AICc is used. There is barely any difference in the computed metrics between AIC and AICc for these data.</p>
 <p>With the use of BIC, the top two models switch places: model with <code>OBs</code> has smaller BIC that model <code>OBs+MAS</code> as well as models 3 and 4 trading places (HR without covariate out-performing <code>MAS</code> covariate). A partial explanation for this re-ordering of models is the <span class="math inline">\(ln(n)\)</span> multiplier for the penalty term. With 1243 detections in this data set, the BIC penalty term used a multiplier of 7.13 rather than a multiplier of 2 for each parameter added to our detection function model. With smaller data sets, the effect of the <span class="math inline">\(ln(n)\)</span> multiplier will be less profound. When the number of observations is on the order of 60-80, the penalty term multiplier is on the order of 4, making each parameter twice as “expensive” in BIC terms, compared to AIC scores.</p>
 </div>
-<div id="references" class="section level1">
-<h1>References</h1>
-<p>Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243. <a href="https://doi.org/10.1642/0004-8038(2007)124%5B1229:IEOBDU%5D2.0.CO;2" class="uri">https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2</a></p>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references hanging-indent">
+<div id="ref-Marques2007">
+<p>Marques, T., Thomas, L., Fancy, S., &amp; Buckland, S. (2007). Improving estimates of bird density using multiple covariate distance sampling. <em>The Auk</em>, <em>127</em>, 1229–1243. <a href="https://doi.org/10.1642/0004-8038(2007)124%5B1229:ieobdu%5D2.0.co;2">https://doi.org/10.1642/0004-8038(2007)124[1229:ieobdu]2.0.co;2</a></p>
+</div>
+</div>
 </div>
 </div>
 

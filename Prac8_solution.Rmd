@@ -1,10 +1,12 @@
 ---
 title: Introduction to distance sampling
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Exercise 8. Covariates in the detection function <br> September 2020
+date: Exercise 8. Covariates in the detection function <br> November 2020
 output: 
   rmdformats::readthedown:
     highlight: tango
+bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -13,9 +15,9 @@ library(knitr)
 library(kableExtra)
 ```
 
-<div class="alert  alert-success">
-  <strong>Solutions</strong> Covariates in the detection function
-</div>
+::: {.alert .alert-success}
+<strong>Solutions</strong> Covariates in the detection function
+:::
 
 # Covariates in point transect detection functions: Amakihi
 
@@ -28,9 +30,9 @@ data(amakihi)
 hist(amakihi$distance, xlab="Radial distances (m)", main="Amakihi point transect data.")
 ```
 
-A truncation distance of 82.5 m was chosen by Marques *et al.* (2007). 
+A truncation distance of 82.5 m was chosen by Marques *et al.* [-@marques2007].
 
-Plots of the covariates were generated. Not surprisingly, `MAS` and `HAS` are correlated and so we need to be cautious of including them in the same model. 
+Plots of the covariates were generated. Not surprisingly, `MAS` and `HAS` are correlated and so we need to be cautious of including them in the same model.
 
 ```{r, fig.height=8}
 # Plots of covariates
@@ -56,7 +58,7 @@ amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 ```
 
-The model selected by Marques *et al.* (2007) used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
+The model selected by Marques *et al.* [-@marques2007] used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
 
 ```{r, fig.height=5, message=FALSE, warning=FALSE}
 # Fit model selected by Marques et al (2007)
@@ -91,16 +93,15 @@ legend("topright", legend=c("SF, minutes=0",
        lty=rep(c(1,2),times=3), lwd=2, col=rep(c("blue","red","green"), each=2))
 ```
 
-<div class="alert alert-danger">
-  <strong>Cautionary tale</strong> A second round of model criticism
-</div>
+::: {.alert .alert-danger}
+<strong>Cautionary tale</strong> A second round of model criticism
+:::
 
-
-The model chosen by Marques et al. (2007) for making inference included minutes after sunrise (MAS) and observer (OBS) as covariates in the detection function.  Did that model produce  estimates of detection probability that were small for some detections?  Recall, because we are using a Horwitz-Thompson-like estimator, our estimates of abundance are quite sensitive to detections with small values of $\widehat{P_a(z_i)}$.  Detections with small $\widehat{P_a(z_i)}$ can have quite large impacts upon population estimates.  
+The model chosen by Marques et al. [-@marques2007] for making inference included minutes after sunrise (MAS) and observer (OBS) as covariates in the detection function. Did that model produce estimates of detection probability that were small for some detections? Recall, because we are using a Horwitz-Thompson-like estimator, our estimates of abundance are quite sensitive to detections with small values of $\widehat{P_a(z_i)}$. Detections with small $\widehat{P_a(z_i)}$ can have quite large impacts upon population estimates.
 
 A new function in the most recent version of the `Distance` package, permits examination of the distribution of the $\widehat{P_a(z_i)}$ so we can assess whether this analysis guideline is violated:
 
-> consider reducing the trunction distance if more than 5\% of the $\widehat{P_a(z_i)}$ are <  0.2, or if any are less than 0.1
+> consider reducing the trunction distance if more than 5% of the $\widehat{P_a(z_i)}$ are \< 0.2, or if any are less than 0.1
 
 ```{r distp, eval=FALSE}
 p_dist_table(amak.hr.obs.mas, proportion = TRUE)
@@ -114,7 +115,7 @@ kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
   row_spec(2, bold=TRUE, color="white", background="blue")
 ```
 
-This suggests redoing the analysis with stronger truncation.  I'll repeat the model fitting (without showing the code) using 70m as the truncation distance.  What do we see when examining the distribution of the $\widehat{P_a(z_i)}$ with the more stringent truncation?
+This suggests redoing the analysis with stronger truncation. I'll repeat the model fitting (without showing the code) using 70m as the truncation distance. What do we see when examining the distribution of the $\widehat{P_a(z_i)}$ with the more stringent truncation?
 
 ```{r moretrunc, echo=FALSE}
 amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
@@ -128,9 +129,9 @@ kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE)
 
 *Should this much truncation cause concern for point estimates and precision?*
 
-The news that model criticism should start over with a new truncation distance would not be good news.  Concerns might also creep into your heads that removing data might affect the point estimates and possibly the precision.  In this case, moving the truncation distance from 82.5m to 70m removed only 1.5\% (19) detections, so it is unlikely that precision was affected.
+The news that model criticism should start over with a new truncation distance would not be good news. Concerns might also creep into your heads that removing data might affect the point estimates and possibly the precision. In this case, moving the truncation distance from 82.5m to 70m removed only 1.5% (19) detections, so it is unlikely that precision was affected.
 
-Regarding the effect upon the point estimates of amakihi density, let's take a step back.  If you were to examine the point and interval estimates for this data set from a number of detection function models, you would find the estimates are robust to model choice.  
+Regarding the effect upon the point estimates of amakihi density, let's take a step back. If you were to examine the point and interval estimates for this data set from a number of detection function models, you would find the estimates are robust to model choice.
 
 ```{r estfigs, fig.cap="Density estimates for amakihi data set under a variety of detection function models and truncation distances.", echo=FALSE, out.width="80%"}
 include_graphics("estimate-comparisons.png")
@@ -138,15 +139,16 @@ include_graphics("estimate-comparisons.png")
 
 *My impression*
 
-For this data set, the effort expended in discriminating between models with one vs two covariates as well as the angst about truncation distances had **imperceptible effects** upon the survey-specific density estimates.  In fact, a model simply using survey replicate as a covariate produced largely the same density estimates.  Understanding the temporal dynamics of the amakihi population was not influenced by covariate modelling.
+For this data set, the effort expended in discriminating between models with one vs two covariates as well as the angst about truncation distances had **imperceptible effects** upon the survey-specific density estimates. In fact, a model simply using survey replicate as a covariate produced largely the same density estimates. Understanding the temporal dynamics of the amakihi population was not influenced by covariate modelling.
 
+```{=html}
 <!--
 To see more sophisticated examples of plotting the detection function for the selected model, see the code accompanying Buckland *et al.* (2015) [Hawaiian Amakihi case study](https://synergy.st-andrews.ac.uk/ds-manda/#hawaiian-amakihi-case-study).
 -->
-
+```
 # More MCDS with line transects: ETP dolphins (optional)
 
-We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.  
+We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.
 
 ```{r}
 data(ETP_Dolphin)
@@ -154,9 +156,10 @@ head(ETP_Dolphin, n=3)
 # Check conversion units
 ETP_Dolphin_units[,1:2]
 ```
+
 Notice that effort and perpendicular distances are both measured in nautical miles and that density is to be reported in animals per square nautical mile, so the conversation factor in this case is 1 and we do not represent it here.
 
-To obtain an overall impression of the data, it is useful to fit a histogram with many intervals. 
+To obtain an overall impression of the data, it is useful to fit a histogram with many intervals.
 
 ```{r, fig.height=4}
 # Histogram of distances with lots of intervals
@@ -194,7 +197,7 @@ knitr::kable(as.data.frame(AIC(etp.hn, etp.hr))) %>%
     kable_styling(bootstrap_options = "condensed", full_width = F)  
 ```
 
-The AIC values suggest that hazard rate key function is preferable to the half normal and so this will be used as the key function in the MCDS models. Each covariate is introduced in turn. 
+The AIC values suggest that hazard rate key function is preferable to the half normal and so this will be used as the key function in the MCDS models. Each covariate is introduced in turn.
 
 ```{r, message=FALSE}
 # Add covariates to hazard rate detection function
@@ -227,11 +230,11 @@ we see that the estimated scale coefficient for search method 3 is substantially
 plot(etp.hr.search, pch=".")
 ```
 
-Search method 3 indicated that the detection was from a helicopter and this detection function suggests that all dolphin schools out to 5 nm were being detected and so detection does not decrease as distance increases. One assumption of MCDS is that the perpendicular distance distributions of the covariate factor levels have the same shape and so it may be worth refitting the models but excluding the observations made by the helicopter.  
+Search method 3 indicated that the detection was from a helicopter and this detection function suggests that all dolphin schools out to 5 nm were being detected and so detection does not decrease as distance increases. One assumption of MCDS is that the perpendicular distance distributions of the covariate factor levels have the same shape and so it may be worth refitting the models but excluding the observations made by the helicopter.
 
 ## Colourful plot noting effect of cue type
 
-Just an example of using the function `add_df_covar_line` to visually explore consequences of covariates on the detection function.  A *regular* call to `plot()` is first used to produce the histogram and average detection function line; subsequent calls to the new function with different values of the covariate of interest completes the plot.
+Just an example of using the function `add_df_covar_line` to visually explore consequences of covariates on the detection function. A *regular* call to `plot()` is first used to produce the histogram and average detection function line; subsequent calls to the new function with different values of the covariate of interest completes the plot.
 
 ```{r, colourful, fig.height=4, fig.cap="Detection function with cue type as covariate."}
 plot(etp.hr.cue, main="ETP dolphin survey", showpoints=FALSE)
@@ -245,7 +248,7 @@ legend("topright", legend=c("Birds","Splashes","Unspecified","Floating objects")
 
 # More MCDS with point transects: Savannah sparrow (optional)
 
-The question here was whether to include pasture as a covariate in the detection function. 
+The question here was whether to include pasture as a covariate in the detection function.
 
 ```{r, fig.width=4, fig.height=4}
 # Savannah sparrow 1980
@@ -281,7 +284,7 @@ Savannah_sparrow_1980.hr.region <- ds(data=Savannah_sparrow_1980, key="hr", trun
 AIC(Savannah_sparrow_1980.hn, Savannah_sparrow_1980.hr, Savannah_sparrow_1980.hn.region, Savannah_sparrow_1980.hr.region)
 ```
 
-The half normal model with pasture as a covariate had a marginally smaller AIC than the half normal model without pasture. The plots and estimates are shown below. 
+The half normal model with pasture as a covariate had a marginally smaller AIC than the half normal model without pasture. The plots and estimates are shown below.
 
 ```{r, fig.cap="Note different PDF shapes caused by the pasture covariate."}
 # Plot results of selected model
@@ -293,7 +296,7 @@ plot(Savannah_sparrow_1980.hn.region, pch=".", pdf=TRUE)
 summary(Savannah_sparrow_1980.hn.region)
 ```
 
-A similar process was conducted for the 1981 data: a truncation distance of 55m was again used.  
+A similar process was conducted for the 1981 data: a truncation distance of 55m was again used.
 
 ```{r}
 # Savannah sparrow 1981
@@ -321,7 +324,7 @@ Savannah_sparrow_1981.hr.region <- ds(data=Savannah_sparrow_1981, key="hr", trun
 AIC(Savannah_sparrow_1981.hn, Savannah_sparrow_1981.hr, Savannah_sparrow_1981.hn.region, Savannah_sparrow_1981.hr.region)
 ```
 
-For 1981, there was a clear preference for including pasture as a covariate in the detection function but little to choose from between the half normal and hazard rate key function. For comparability with 1980, the plots and results below are for the half normal model although AIC showed a slight preference for the hazard rate model. The differences in detection between pastures can easily be seen and this is reflected in the estimated densities (birds per hectare). 
+For 1981, there was a clear preference for including pasture as a covariate in the detection function but little to choose from between the half normal and hazard rate key function. For comparability with 1980, the plots and results below are for the half normal model although AIC showed a slight preference for the hazard rate model. The differences in detection between pastures can easily be seen and this is reflected in the estimated densities (birds per hectare).
 
 ```{r, fig.height=6, fig.width=8, fig.cap="Stronger influence of pasture covariate seen here."}
 pastures <- unique(Savannah_sparrow_1981$Region.Label)
@@ -352,6 +355,3 @@ summary(Savannah_sparrow_1981.hn.region)
 In these models, the detection functions have been fitted to all the detections within the study region (for each year). An alternative would be to fit separate detection functions within each pasture (specified in `Region.Label`), provided there are enough detections. This would allow different shape detection functions to be fitted in each pasture (providing this is a reasonable thing to do).
 
 # References
-
-Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243. https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2
-

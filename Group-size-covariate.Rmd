@@ -1,7 +1,7 @@
 ---
 title: Introduction to distance sampling
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Exercise 8. Covariates in the detection function <br> September 2020
+date: Exercise 8. Covariates in the detection function <br> November 2020
 output: 
   rmdformats::readthedown:
     highlight: tango

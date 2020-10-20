@@ -1,33 +1,35 @@
 ---
 title: "Introduction to distance sampling"
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Other model selection metrics <br> September 2020
+date: Other model selection metrics <br> November 2020
 output:
   rmdformats::readthedown:
     highlight: tango
+bibliography: references.bib
+csl: apa.csl
 ---
-  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, comment = NA)
 library(kableExtra)
 library(knitr)
 ```
 
-<div class="alert  alert-success">
-  <strong>Demonstration</strong> Alternative model selection metrics
-</div>
+::: {.alert .alert-success}
+<strong>Demonstration</strong> Alternative model selection metrics
+:::
 
 # The other metrics
 
-## AICc 
+## AICc
 
 Defined as:
 
 $$AICc = -2ln(\mathscr{L}) - 2k + \frac{2k(k+1)}{n-k-1}$$
 
-where *k* is the number of parameters in the model and *n* is the number of observations. In general, if $n$ is many times larger than $k^2$, then the extra term will be negligible.  What do we know, in general, about the magnitude of *k* and *n* in **typical** distance sampling situations?  We encourage the collection of 60 to 80 detections ($n$). A hazard rate key function with a four-level factor covariate has $k=5$ parameters.  The value of the the $c$ term added to the *regular* AIC ranges from `r round((2*5*(5+1))/(60-5-1),2)` with $n=60$ to `r round((2*5*(5+1))/(80-5-1),2)` with $n=80$.
+where *k* is the number of parameters in the model and *n* is the number of observations. In general, if $n$ is many times larger than $k^2$, then the extra term will be negligible. What do we know, in general, about the magnitude of *k* and *n* in **typical** distance sampling situations? We encourage the collection of 60 to 80 detections ($n$). A hazard rate key function with a four-level factor covariate has $k=5$ parameters. The value of the the $c$ term added to the *regular* AIC ranges from `r round((2*5*(5+1))/(60-5-1),2)` with $n=60$ to `r round((2*5*(5+1))/(80-5-1),2)` with $n=80$.
 
-For a two-parameter model (hazard rate or half normal with a single continuous covariate) the value of the additional term would be `r round((2*2*(2+1))/(60-2-1),2)` with $n=60$ to `r round((2*2*(2+1))/(80-2-1),2)` with $n=80$.  Recognise the magnitude of the other terms in the AIC are in the hundreds or thousands (see below).
+For a two-parameter model (hazard rate or half normal with a single continuous covariate) the value of the additional term would be `r round((2*2*(2+1))/(60-2-1),2)` with $n=60$ to `r round((2*2*(2+1))/(80-2-1),2)` with $n=80$. Recognise the magnitude of the other terms in the AIC are in the hundreds or thousands (see below).
 
 ## BIC
 
@@ -49,14 +51,14 @@ where `object` is the name of the object created by `ds()`.
 
 # Demonstration with amakihi
 
-The amakihi analysis of Practical 8 (and Marques et al. (2007)) demonstrates the model ranking when using the differing model selection metrics.
+The amakihi analysis of Practical 8 (and Marques et al. [-@Marques2007]) demonstrates the model ranking when using the differing model selection metrics.
 
 ```{r setupgo, message=FALSE}
 library(Distance)
 data(amakihi)
 ```
 
-A short function that computes all three model selection metrics for a given fitted `ds` object.  A vector of all three scores is returned by the function.
+A short function that computes all three model selection metrics for a given fitted `ds` object. A vector of all three scores is returned by the function.
 
 ```{r altmet}
 altmetric <- function(modelobj) {
@@ -71,7 +73,7 @@ altmetric <- function(modelobj) {
 
 ```
 
-Fit a series of models to the amakihi data set, described in Marques et al. (2007).  Call the `altmetric()` function for each of the fitted models, combine the resulting vectors into a data frame.
+Fit a series of models to the amakihi data set, described in Marques et al. [-@Marques2007]. Call the `altmetric()` function for each of the fitted models, combine the resulting vectors into a data frame.
 
 ```{r fits, message=FALSE}
 conv <- convert_units("meter", NULL, "hectare")
@@ -113,10 +115,8 @@ kable(results[order(results$BIC),], caption="Models ordered by BIC") %>%
 
 # Comparison of selection from the three metrics
 
-There is no difference in model order whether AIC or AICc is used.  There is barely any difference in the computed metrics between AIC and AICc for these data.
+There is no difference in model order whether AIC or AICc is used. There is barely any difference in the computed metrics between AIC and AICc for these data.
 
-With the use of BIC, the top two models switch places: model with `OBs` has smaller BIC that model `OBs+MAS` as well as models 3 and 4 trading places (HR without covariate out-performing `MAS` covariate).  A partial explanation for this re-ordering of models is the $ln(n)$ multiplier for the penalty term.  With 1243 detections in this data set, the BIC penalty term used a multiplier of `r round(log(1243), 2)` rather than a multiplier of 2 for each parameter added to our detection function model.  With smaller data sets, the effect of the $ln(n)$ multiplier will be less profound.  When the number of observations is on the order of 60-80, the penalty term multiplier is on the order of 4, making each parameter twice as "expensive" in BIC terms, compared to AIC scores.
+With the use of BIC, the top two models switch places: model with `OBs` has smaller BIC that model `OBs+MAS` as well as models 3 and 4 trading places (HR without covariate out-performing `MAS` covariate). A partial explanation for this re-ordering of models is the $ln(n)$ multiplier for the penalty term. With 1243 detections in this data set, the BIC penalty term used a multiplier of `r round(log(1243), 2)` rather than a multiplier of 2 for each parameter added to our detection function model. With smaller data sets, the effect of the $ln(n)$ multiplier will be less profound. When the number of observations is on the order of 60-80, the penalty term multiplier is on the order of 4, making each parameter twice as "expensive" in BIC terms, compared to AIC scores.
 
 # References
-
-Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243. https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2

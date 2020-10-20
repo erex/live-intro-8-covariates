@@ -1626,7 +1626,7 @@ $(document).ready(function () {
     
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
               <p class="author"><span class="glyphicon glyphicon-user"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
-                  <p class="date"><span class="glyphicon glyphicon-calendar"></span> Exercise 8. Covariates in the detection function <br> September 2020</p>
+                  <p class="date"><span class="glyphicon glyphicon-calendar"></span> Exercise 8. Covariates in the detection function <br> November 2020</p>
         </div>
 </div>
 
@@ -1645,7 +1645,7 @@ $(document).ready(function () {
 </div>
 <div id="covariates-in-point-transect-detection-functions-amakihi" class="section level1">
 <h1>Covariates in point transect detection functions: Amakihi</h1>
-<p>In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi <em>(Hemignathus virens)</em> is used. This practical is based on the case study in Buckland <em>et al.</em> (2015) which duplicates the analysis in Marques <em>et al.</em> (2007).</p>
+<p>In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi <em>(Hemignathus virens)</em> is used. This practical is based on the case study in Buckland <em>et al.</em> <span class="citation">(2015)</span> which duplicates the analysis in Marques <em>et al.</em> <span class="citation">(2007)</span>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(Distance)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">data</span>(amakihi)</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># See what columns it contains</span></span>
@@ -1664,7 +1664,7 @@ $(document).ready(function () {
 <p>Note that the <code>Area</code> column is always zero, hence, detection functions can be fitted to the data, but bird abundance cannot be estimated. The covariates to be considered for possible inclusion into the detection function are <code>OBs</code>, <code>MAS</code> and <code>HAS</code>.</p>
 <div id="exploratory-data-analysis" class="section level2">
 <h2>Exploratory data analysis</h2>
-<p>It is important to gain an understanding of the data prior to fitting detection functions (Buckland <em>et al.</em> 2015). With this in mind, preliminary analysis of distance sampling data involves:</p>
+<p>It is important to gain an understanding of the data prior to fitting detection functions <span class="citation">(Buckland et al., 2015)</span>. With this in mind, preliminary analysis of distance sampling data involves:</p>
 <ul>
 <li>assessing the shape of the collected data,</li>
 <li>considering the level of truncation of distances, and</li>
@@ -1697,7 +1697,7 @@ $(document).ready(function () {
 <p>We would like to treat <code>OBs</code> and <code>HAS</code> as factor variables as in the original analysis; <code>OBs</code> is, by default, treated as a factor variable because it consists of characters rather than numbers. <code>HAS</code>, on the other hand, consists of numbers and so by default would be treated as a continuous variable (i.e. non-factor). That is fine if we want the effect of <code>HAS</code> to be monotonic (i.e. detectability either increases or decreases as a function of <code>HAS</code>). If we want <code>HAS</code> to have a non-linear effect on detectability, then we need to indicate to <code>R</code> to treat it as a factor as shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Convert HAS to a factor</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>amakihi<span class="op">$</span>HAS &lt;-<span class="st"> </span><span class="kw">factor</span>(amakihi<span class="op">$</span>HAS)</span></code></pre></div>
-<p>The next adjustment is to change the <em>reference</em> level of the <em>observer</em> and <em>hour</em> factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in Marques <em>et al.</em> (2007). You would not carry out this step on your own data. By default R uses the first factor level but by using the <code>relevel</code> function, this can be changed:</p>
+<p>The next adjustment is to change the <em>reference</em> level of the <em>observer</em> and <em>hour</em> factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in Marques <em>et al.</em> <span class="citation">(2007)</span>. You would not carry out this step on your own data. By default R uses the first factor level but by using the <code>relevel</code> function, this can be changed:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Set the reference level </span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>amakihi<span class="op">$</span>OBs &lt;-<span class="st"> </span><span class="kw">relevel</span>(amakihi<span class="op">$</span>OBs, <span class="dt">ref=</span><span class="st">&quot;TKP&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3"></a>amakihi<span class="op">$</span>HAS &lt;-<span class="st"> </span><span class="kw">relevel</span>(amakihi<span class="op">$</span>HAS, <span class="dt">ref=</span><span class="st">&quot;5&quot;</span>)</span></code></pre></div>
@@ -1715,7 +1715,7 @@ $(document).ready(function () {
 <li>HAS + MAS</li>
 <li>OBs + HAS + MAS</li>
 </ul>
-<p>Even without considering covariates there are also several possible key function/adjustment term combinations available: if all key function/covariate combinations are considered the number of potential models is large. Note that covariates are not allowed if a uniform key function is chosen and if covariate terms are included, adjustment terms are not allowed. Even with these restrictions, it is not best practice to take a scatter gun approach to detection function model fitting. Buckland et al. (2015) considered 13 combinations of key function/covariates. Here, we look at a subset of these.</p>
+<p>Even without considering covariates there are also several possible key function/adjustment term combinations available: if all key function/covariate combinations are considered the number of potential models is large. Note that covariates are not allowed if a uniform key function is chosen and if covariate terms are included, adjustment terms are not allowed. Even with these restrictions, it is not best practice to take a scatter gun approach to detection function model fitting. Buckland et al. <span class="citation">(2015)</span> considered 13 combinations of key function/covariates. Here, we look at a subset of these.</p>
 <p>Fit a hazard rate model with no covariates or adjustment terms and make a note of the AIC. Note, that 10% of the largest distances are truncated - you may have decided on a different truncation distance.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>conversion.factor &lt;-<span class="st"> </span><span class="kw">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="ot">NULL</span>, <span class="st">&quot;hectare&quot;</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a>amak.hr &lt;-<span class="st"> </span><span class="kw">ds</span>(amakihi, <span class="dt">transect=</span><span class="st">&quot;point&quot;</span>, <span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">truncation=</span><span class="st">&quot;10%&quot;</span>,</span>
@@ -1739,7 +1739,7 @@ $(document).ready(function () {
 </div>
 <div id="more-mcds-with-line-transects-etp-dolphins" class="section level1">
 <h1>More MCDS with line transects: ETP dolphins</h1>
-<p>In this problem we have a sample of Eastern Tropical Pacific (ETP) spotted dolphin sightings data, collected by observers placed on board tuna vessels (the data were kindly made available by the Inter-American Tropical Tuna Commission - IATTC). In the ETP, schools of yellow fin tuna commonly occur with schools (or groups) of dolphins, and so vessels fishing for tuna often search for dolphins in the hopes of also locating tuna. For each dolphin school detected by the tuna vessels, the observer recorded the species, sighting angle and distance (later converted to perpendicular distance and truncated at 5 nautical miles), school size and a number of covariates associated with each detected school. Many of these covariates potentially affect the detection function, as they reflect how the search was being carried out.</p>
+<p>In this problem we have a sample of Eastern Tropical Pacific (ETP) spotted dolphin sightings data, collected by observers placed on board tuna vessels (the data were kindly made available by the Inter-American Tropical Tuna Commission - IATTC). Further description of the survey can be found in Marques and Buckland <span class="citation">(2003)</span>. In the ETP, schools of yellow fin tuna commonly occur with schools (or groups) of dolphins, and so vessels fishing for tuna often search for dolphins in the hopes of also locating tuna. For each dolphin school detected by the tuna vessels, the observer recorded the species, sighting angle and distance (later converted to perpendicular distance and truncated at 5 nautical miles), school size and a number of covariates associated with each detected school. Many of these covariates potentially affect the detection function, as they reflect how the search was being carried out.</p>
 <p>A variety of search methods were used to find the dolphins, and for these data were (the numbers in brackets are the codes used to record the data):</p>
 <ul>
 <li>20x binoculars from the crow’s nest (0)</li>
@@ -1770,7 +1770,7 @@ $(document).ready(function () {
 </div>
 <div id="more-mcds-with-point-transects-savannah-sparrow" class="section level1">
 <h1>More MCDS with point transects: Savannah sparrow</h1>
-<p>Point transect surveys were conducted in Arapaho National Wildlife Refuge, Colorado, USA, in 1980 and 1981 and this exercise concerns the data collected on Savannah sparrows. The study area was divided into smaller regions (called ‘pastures’). The data are available in the <code>Distance</code> package.</p>
+<p>Point transect surveys were conducted in Arapaho National Wildlife Refuge, Colorado, USA, in 1980 and 1981 <span class="citation">(Knopf et al., 1988)</span> and this exercise concerns the data collected on Savannah sparrows. The study area was divided into smaller regions (called ‘pastures’). The data are available in the <code>Distance</code> package.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1980</span>)</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="kw">data</span>(Savannah_sparrow_<span class="dv">1981</span>)</span></code></pre></div>
 <p>Distances were recorded in metres and area in hectares.</p>
@@ -1785,11 +1785,22 @@ $(document).ready(function () {
 </ol>
 <p>What would be an alternative to including pasture as a covariate in the detection function to analyse these data?</p>
 </div>
-<div id="references" class="section level1">
-<h1>References</h1>
-<p>Buckland ST, Rexstad E, Marques TA and Oedekoven CS. (2015) Distance sampling: methods and applications. Springer</p>
-<p>Knopf FL, Sedgwick JA, and Cannon RW. (1988) Guild structure of a riparian avifauna relative to seasonal cattle grazing. Journal of Wildlife Management 52:280–290. <a href="https://doi.org/10.2307/3801235" class="uri">https://doi.org/10.2307/3801235</a></p>
-<p>Marques TA, Thomas L, Fancy SG and Buckland ST (2007) Improving estimates of bird density using multiple covariate distance sampling. The Auk 124:1229-1243. <a href="https://doi.org/10.1642/0004-8038(2007)124%5B1229:IEOBDU%5D2.0.CO;2" class="uri">https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2</a></p>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references hanging-indent">
+<div id="ref-buckland2015">
+<p>Buckland, S., Rexstad, E., Marques, T., &amp; Oedekoven, C. (2015). <em>Distance sampling: Methods and applications</em>. <a href="https://doi.org/10.1007/978-3-319-19219-2_1">https://doi.org/10.1007/978-3-319-19219-2_1</a></p>
+</div>
+<div id="ref-knopf1988">
+<p>Knopf, F., Sedgwick, J., &amp; Cannon, R. (1988). Guild structure of a riparian avifauna relative to seasonal cattle grazing. <em>The Journal of Wildlife Management</em>, <em>52</em>(2), 280–290. <a href="https://doi.org/10.2307/3801235">https://doi.org/10.2307/3801235</a></p>
+</div>
+<div id="ref-FMARBUC03">
+<p>Marques, F., &amp; Buckland, S. (2003). Incorporating covariates into standard line transect analyses. <em>Biometrics</em>, <em>59</em>, 924–935. <a href="https://doi.org/10.1111/j.0006-341x.2003.00107.x">https://doi.org/10.1111/j.0006-341x.2003.00107.x</a></p>
+</div>
+<div id="ref-marques2007">
+<p>Marques, T., Thomas, L., Fancy, S., &amp; Buckland, S. (2007). Improving estimates of bird density using multiple-covariate distance sampling. <em>The Auk</em>, <em>124</em>(4), 1229–1243. <a href="https://doi.org/10.1642/0004-8038(2007)124%5B1229:IEOBDU%5D2.0.CO;2">https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2</a></p>
+</div>
+</div>
 </div>
 </div>
 
