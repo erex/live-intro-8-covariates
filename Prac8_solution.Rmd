@@ -1,7 +1,7 @@
 ---
-title: Introduction to distance sampling
+title: Exercise 8<br> Covariates in the detection function
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Exercise 8. Covariates in the detection function <br> November 2020
+date: Introduction to distance sampling<br> April 2021
 output: 
   rmdformats::readthedown:
     highlight: tango
@@ -68,7 +68,7 @@ amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, con
 
 # Plot selected model
 
-plot(amak.hr.obs.mas, showpoints=FALSE, main="Amakihi Observer and Minutes")
+plot(amak.hr.obs.mas, showpoints=FALSE, main="Amakihi Observer and Minutes", pdf=TRUE)
 sfzero <- data.frame(OBs="SGF", MAS=0)
 sf180 <- data.frame(OBs="SGF", MAS=180)
 t1zero <- data.frame(OBs="TJS", MAS=0)
@@ -76,12 +76,12 @@ t1180 <- data.frame(OBs="TJS", MAS=180)
 t2zero <- data.frame(OBs="TKP", MAS=0)
 t2180 <- data.frame(OBs="TKP", MAS=180)
 
-add_df_covar_line(amak.hr.obs.mas, data=sfzero, lty=1, lwd=2,col="blue")
-add_df_covar_line(amak.hr.obs.mas, data=sf180, lty=2, lwd=2,col="blue")
-add_df_covar_line(amak.hr.obs.mas, data=t1zero, lty=1,lwd=2,col="red")
-add_df_covar_line(amak.hr.obs.mas, data=t1180, lty=2, lwd=2,col="red")
-add_df_covar_line(amak.hr.obs.mas, data=t2zero, lty=1,lwd=2,col="green")
-add_df_covar_line(amak.hr.obs.mas, data=t2180, lty=2, lwd=2,col="green")
+add_df_covar_line(amak.hr.obs.mas, data=sfzero, lty=1, lwd=2,col="blue", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=sf180, lty=2, lwd=2,col="blue", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t1zero, lty=1,lwd=2,col="red", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t1180, lty=2, lwd=2,col="red", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t2zero, lty=1,lwd=2,col="green", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t2180, lty=2, lwd=2,col="green", pdf=TRUE)
 
 legend("topright", legend=c("SF, minutes=0",
                             "SF, minutes=180",
@@ -117,7 +117,7 @@ kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
 
 This suggests redoing the analysis with stronger truncation. I'll repeat the model fitting (without showing the code) using 70m as the truncation distance. What do we see when examining the distribution of the $\widehat{P_a(z_i)}$ with the more stringent truncation?
 
-```{r moretrunc, echo=FALSE}
+```{r moretrunc, echo=FALSE, eval=TRUE}
 amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
                       truncation=70)
 kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE),
@@ -329,23 +329,23 @@ For 1981, there was a clear preference for including pasture as a covariate in t
 ```{r, fig.height=6, fig.width=8, fig.cap="Stronger influence of pasture covariate seen here."}
 pastures <- unique(Savannah_sparrow_1981$Region.Label)
 plot(Savannah_sparrow_1981.hn.region, showpoints=FALSE, 
-     main="Savannah sparrows with pasture covariate")
+     main="Savannah sparrows with pasture covariate", pdf=TRUE)
 k <- 1
 for (i in pastures) {
   k <- k+1
   add_df_covar_line(Savannah_sparrow_1981.hn.region, 
                     data=data.frame(Region.Label=as.character(i)),
-                    lty=1, col=k, lwd=3)
+                    lty=1, col=k, lwd=3, pdf=TRUE)
 }
 legend("topright", legend=tolower(as.character(pastures)), 
        col=2:k, lwd=2, title = "Pastures")
-text(32,0.72, cex=0.9, pos=4,
+text(-2,0.038, cex=0.9, pos=4,
      expression(widehat(sigma[p])==plain(exp)(widehat(beta[0]) + widehat(beta[1]) %.% p[1] + widehat(beta[2]) %.% p[2] + widehat(beta[3]) %.% p[3])))
 library(plotrix)
 parms <- data.frame(est=c(2.944, 0.736, 0.166, 0.271),
                     se=c(0.111, 0.373, 0.153, 0.179))
 rownames(parms) <- c("b0", "b1", "b2", "b3")
-addtable2plot(31, 0.83, parms, bty="o",
+addtable2plot(2, 0.027, parms, bty="o",
               display.rownames=TRUE,hlines=TRUE, cex=0.8,
               xpad=0.4, vlines=FALSE,title="Parameter estimates")
 # Summary of results for selected model
