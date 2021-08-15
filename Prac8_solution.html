@@ -201,8 +201,8 @@
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
-                  <p class="author"><span class="glyphicon glyphicon-education"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
-                        <p class="date"><span class="glyphicon glyphicon-leaf"></span> Introduction to distance sampling<br> April 2021</p>
+                  <p class="author"><span class="glyphicon glyphicon-user"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> Introduction to distance sampling<br> September 2021</p>
           </div>
    </div>
      
@@ -473,7 +473,7 @@ To see more sophisticated examples of plotting the detection function for the se
 </div>
 <div id="more-mcds-with-line-transects-etp-dolphins-optional" class="section level1">
 <h1>More MCDS with line transects: ETP dolphins (optional)</h1>
-<p>We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.</p>
+<p>We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data. A more complete analysis can be found in <span class="citation">F. F. C. Marques &amp; Buckland (2003)</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ETP_Dolphin)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ETP_Dolphin, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##   Region.Label Area Sample.Label Effort object distance LnCluster Month
@@ -753,18 +753,18 @@ Hazard-rate
 ## Detection function parameters 
 ## Scale coefficient(s):  
 ##                         estimate         se
-## (Intercept)            0.3355245  0.2072054
-## factor(Search.method)2 0.3208263  0.2112966
-## factor(Search.method)3 3.1275573 78.6958741
-## factor(Search.method)5 0.2430533  0.5378467
+## (Intercept)            0.3355246  0.2072054
+## factor(Search.method)2 0.3208267  0.2112965
+## factor(Search.method)3 3.1276036 78.7229099
+## factor(Search.method)5 0.2430706  0.5378481
 ## 
 ## Shape coefficient(s):  
-##              estimate        se
-## (Intercept) 0.0782795 0.1387478
+##               estimate        se
+## (Intercept) 0.07827977 0.1387478
 ## 
 ##                         Estimate           SE         CV
-## Average p              0.5837963   0.03601627 0.06169321
-## N in covered region 1867.0894782 121.16110324 0.06489304</code></pre>
+## Average p              0.5837966   0.03601626 0.06169318
+## N in covered region 1867.0887530 121.16100229 0.06489301</code></pre>
 <p>we see that the estimated scale coefficient for search method 3 is substantially larger than the estimated scale coefficients for other methods. The effect this has on the detection function is clearly seen in the detection function plot.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot search method detection function</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(etp.hr.search, <span class="at">pch=</span><span class="st">&quot;.&quot;</span>)</span></code></pre></div>
@@ -790,7 +790,7 @@ Detection function with cue type as covariate.
 </div>
 <div id="more-mcds-with-point-transects-savannah-sparrow-optional" class="section level1">
 <h1>More MCDS with point transects: Savannah sparrow (optional)</h1>
-<p>The question here was whether to include pasture as a covariate in the detection function.</p>
+<p>Recall, these are data from Colorado, described by <span class="citation">Knopf et al. (1988)</span>. The question here was whether to include pasture as a covariate in the detection function. The biological question being, “does detectability of Savannah sparrows differ between the pastures in which the survey was conducted.”</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Savannah sparrow 1980</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Savannah_sparrow_1980)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check data</span></span>
@@ -946,13 +946,13 @@ Stronger influence of pasture covariate seen here.
 ## Scale coefficient(s):  
 ##                        estimate        se
 ## (Intercept)           2.9440437 0.1110264
-## Region.LabelPASTURE 1 0.7362663 0.3728514
-## Region.LabelPASTURE 2 0.1660984 0.1525318
+## Region.LabelPASTURE 1 0.7362664 0.3728514
+## Region.LabelPASTURE 2 0.1660985 0.1525318
 ## Region.LabelPASTURE 3 0.2703056 0.1791857
 ## 
 ##                        Estimate          SE        CV
-## Average p             0.3435477  0.03716044 0.1081668
-## N in covered region 471.5502205 59.62873284 0.1264526
+## Average p             0.3435477  0.03716045 0.1081668
+## N in covered region 471.5501855 59.62873040 0.1264526
 ## 
 ## Summary statistics:
 ##      Region Area CoveredArea Effort   n   k    ER      se.ER      cv.ER
@@ -963,27 +963,33 @@ Stronger influence of pasture covariate seen here.
 ## 5     Total    4   380.13271    400 162 400 0.405 0.03435678 0.08483156
 ## 
 ## Abundance:
-##       Label Estimate        se        cv       lcl      ucl       df
-## 1 PASTURE 0 1.388756 0.3779453 0.2721467 0.8203859 2.350896 255.9017
-## 2 PASTURE 1 0.524189 0.1818332 0.3468849 0.2698826 1.018125 250.9333
-## 3 PASTURE 2 1.698070 0.4058405 0.2390010 1.0674984 2.701122 251.7567
-## 4 PASTURE 3 1.350939 0.3545942 0.2624799 0.8125823 2.245970 253.0329
-## 5     Total 4.961954 0.6827518 0.1375974 3.7903716 6.495665 356.9877
+##       Label  Estimate        se        cv       lcl      ucl       df
+## 1 PASTURE 0 1.3887554 0.3779453 0.2721468 0.8203859 2.350896 255.9017
+## 2 PASTURE 1 0.5241889 0.1818332 0.3468849 0.2698826 1.018124 250.9333
+## 3 PASTURE 2 1.6980703 0.4058404 0.2390010 1.0674983 2.701122 251.7567
+## 4 PASTURE 3 1.3509386 0.3545942 0.2624799 0.8125823 2.245970 253.0329
+## 5     Total 4.9619533 0.6827518 0.1375974 3.7903713 6.495664 356.9877
 ## 
 ## Density:
-##       Label Estimate        se        cv       lcl      ucl       df
-## 1 PASTURE 0 1.388756 0.3779453 0.2721467 0.8203859 2.350896 255.9017
-## 2 PASTURE 1 0.524189 0.1818332 0.3468849 0.2698826 1.018125 250.9333
-## 3 PASTURE 2 1.698070 0.4058405 0.2390010 1.0674984 2.701122 251.7567
-## 4 PASTURE 3 1.350939 0.3545942 0.2624799 0.8125823 2.245970 253.0329
-## 5     Total 1.240488 0.1706880 0.1375974 0.9475929 1.623916 356.9877</code></pre>
+##       Label  Estimate        se        cv       lcl      ucl       df
+## 1 PASTURE 0 1.3887554 0.3779453 0.2721468 0.8203859 2.350896 255.9017
+## 2 PASTURE 1 0.5241889 0.1818332 0.3468849 0.2698826 1.018124 250.9333
+## 3 PASTURE 2 1.6980703 0.4058404 0.2390010 1.0674983 2.701122 251.7567
+## 4 PASTURE 3 1.3509386 0.3545942 0.2624799 0.8125823 2.245970 253.0329
+## 5     Total 1.2404883 0.1706880 0.1375974 0.9475928 1.623916 356.9877</code></pre>
 <p>In these models, the detection functions have been fitted to all the detections within the study region (for each year). An alternative would be to fit separate detection functions within each pasture (specified in <code>Region.Label</code>), provided there are enough detections. This would allow different shape detection functions to be fitted in each pasture (providing this is a reasonable thing to do).</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
-<div id="ref-marques2007" class="csl-entry">
-Marques, T. A., Thomas, L., Fancy, S. G., &amp; Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. <em>The Auk</em>, <em>124</em>(4), 1229–1243. <a href="https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2">https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2</a>
+<div id="ref-knopf1988" class="csl-entry">
+Knopf, F. L., Sedgwick, J. A., &amp; Cannon, R. W. (1988). Guild structure of a riparian avifauna relative to seasonal cattle grazing. <em>The Journal of Wildlife Management</em>, <em>52</em>(2), 280–290. <a href="https://doi.org/10.2307/3801235">https://doi.org/10.2307/3801235</a>
+</div>
+<div id="ref-FMARBUC03" class="csl-entry">
+Marques, F. F. C., &amp; Buckland, S. T. (2003). Incorporating covariates into standard line transect analyses. <em>Biometrics</em>, <em>59</em>, 924–935. <a href="https://doi.org/10.1111/j.0006-341x.2003.00107.x">https://doi.org/10.1111/j.0006-341x.2003.00107.x</a>
+</div>
+<div id="ref-Marques2007" class="csl-entry">
+Marques, T. A., Thomas, L., Fancy, S. G., &amp; Buckland, S. T. (2007). Improving estimates of bird density using multiple covariate distance sampling. <em>The Auk</em>, <em>127</em>, 1229–1243. <a href="https://doi.org/10.1642/0004-8038(2007)124[1229:ieobdu]2.0.co;2">https://doi.org/10.1642/0004-8038(2007)124[1229:ieobdu]2.0.co;2</a>
 </div>
 </div>
 </div>

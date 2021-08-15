@@ -1,7 +1,7 @@
 ---
 title: Exercise 8<br> Covariates in the detection function
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Introduction to distance sampling<br> April 2021
+date: Introduction to distance sampling<br> September 2021
 output: 
   rmdformats::readthedown:
     highlight: tango
@@ -30,7 +30,7 @@ data(amakihi)
 hist(amakihi$distance, xlab="Radial distances (m)", main="Amakihi point transect data.")
 ```
 
-A truncation distance of 82.5 m was chosen by Marques *et al.* [-@marques2007].
+A truncation distance of 82.5 m was chosen by Marques *et al.* [-@Marques2007].
 
 Plots of the covariates were generated. Not surprisingly, `MAS` and `HAS` are correlated and so we need to be cautious of including them in the same model.
 
@@ -58,7 +58,7 @@ amakihi$OBs <- relevel(amakihi$OBs, ref="TKP")
 amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 ```
 
-The model selected by Marques *et al.* [-@marques2007] used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
+The model selected by Marques *et al.* [-@Marques2007] used a hazard rate key function and included observer and minutes after sunrise (treating time as a continuous rather than discrete covariate)- this model is fitted below. The PDF plot is shown.
 
 ```{r, fig.height=5, message=FALSE, warning=FALSE}
 # Fit model selected by Marques et al (2007)
@@ -97,7 +97,7 @@ legend("topright", legend=c("SF, minutes=0",
 <strong>Cautionary tale</strong> A second round of model criticism
 :::
 
-The model chosen by Marques et al. [-@marques2007] for making inference included minutes after sunrise (MAS) and observer (OBS) as covariates in the detection function. Did that model produce estimates of detection probability that were small for some detections? Recall, because we are using a Horwitz-Thompson-like estimator, our estimates of abundance are quite sensitive to detections with small values of $\widehat{P_a(z_i)}$. Detections with small $\widehat{P_a(z_i)}$ can have quite large impacts upon population estimates.
+The model chosen by Marques et al. [-@Marques2007] for making inference included minutes after sunrise (MAS) and observer (OBS) as covariates in the detection function. Did that model produce estimates of detection probability that were small for some detections? Recall, because we are using a Horwitz-Thompson-like estimator, our estimates of abundance are quite sensitive to detections with small values of $\widehat{P_a(z_i)}$. Detections with small $\widehat{P_a(z_i)}$ can have quite large impacts upon population estimates.
 
 A new function in the most recent version of the `Distance` package, permits examination of the distribution of the $\widehat{P_a(z_i)}$ so we can assess whether this analysis guideline is violated:
 
@@ -148,7 +148,7 @@ To see more sophisticated examples of plotting the detection function for the se
 ```
 # More MCDS with line transects: ETP dolphins (optional)
 
-We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.
+We have not provided a comprehensive analysis of these data but have highlighted a few general feature of these data.  A more complete analysis can be found in @FMARBUC03.
 
 ```{r}
 data(ETP_Dolphin)
@@ -248,7 +248,7 @@ legend("topright", legend=c("Birds","Splashes","Unspecified","Floating objects")
 
 # More MCDS with point transects: Savannah sparrow (optional)
 
-The question here was whether to include pasture as a covariate in the detection function.
+Recall, these are data from Colorado, described by @knopf1988.  The question here was whether to include pasture as a covariate in the detection function.  The biological question being, "does detectability of Savannah sparrows differ between the pastures in which the survey was conducted."
 
 ```{r, fig.width=4, fig.height=4}
 # Savannah sparrow 1980

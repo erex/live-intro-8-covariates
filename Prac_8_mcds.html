@@ -205,8 +205,8 @@
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
-                  <p class="author"><span class="glyphicon glyphicon-education"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
-                        <p class="date"><span class="glyphicon glyphicon-leaf"></span> Introduction to distance sampling<br> April 2021</p>
+                  <p class="author"><span class="glyphicon glyphicon-user"></span> Centre for Research into Ecological and Environmental Modelling <br> <strong>University of St Andrews</strong></p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> Introduction to distance sampling<br> September 2021</p>
           </div>
    </div>
      
@@ -230,7 +230,7 @@
 </div>
 <div id="covariates-in-point-transect-detection-functions-amakihi" class="section level1">
 <h1>Covariates in point transect detection functions: Amakihi</h1>
-<p>In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi <em>(Hemignathus virens)</em> is used. This practical is based on the case study in Buckland <em>et al.</em> <span class="citation">(2015)</span> which duplicates the analysis in Marques <em>et al.</em> <span class="citation">(2007)</span>.</p>
+<p>In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi <em>(Hemignathus virens)</em> is used. This practical is based on the case study in Buckland <em>et al.</em> <span class="citation">(2015)</span> which duplicates the analysis in Marques <em>et al.</em> <span class="citation">(<strong>marques2007?</strong>)</span>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Distance)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(amakihi)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># See what columns it contains</span></span>
@@ -282,7 +282,7 @@
 <p>We would like to treat <code>OBs</code> and <code>HAS</code> as factor variables as in the original analysis; <code>OBs</code> is, by default, treated as a factor variable because it consists of characters rather than numbers. <code>HAS</code>, on the other hand, consists of numbers and so by default would be treated as a continuous variable (i.e. non-factor). That is fine if we want the effect of <code>HAS</code> to be monotonic (i.e. detectability either increases or decreases as a function of <code>HAS</code>). If we want <code>HAS</code> to have a non-linear effect on detectability, then we need to indicate to <code>R</code> to treat it as a factor as shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert HAS to a factor</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>amakihi<span class="sc">$</span>HAS <span class="ot">&lt;-</span> <span class="fu">factor</span>(amakihi<span class="sc">$</span>HAS)</span></code></pre></div>
-<p>The next adjustment is to change the <em>reference</em> level of the <em>observer</em> and <em>hour</em> factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in Marques <em>et al.</em> <span class="citation">(2007)</span>. You would not carry out this step on your own data. By default R uses the first factor level but by using the <code>relevel</code> function, this can be changed:</p>
+<p>The next adjustment is to change the <em>reference</em> level of the <em>observer</em> and <em>hour</em> factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in Marques <em>et al.</em> <span class="citation">(<strong>marques2007?</strong>)</span>. You would not carry out this step on your own data. By default R uses the first factor level but by using the <code>relevel</code> function, this can be changed:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the reference level </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>amakihi<span class="sc">$</span>OBs <span class="ot">&lt;-</span> <span class="fu">relevel</span>(amakihi<span class="sc">$</span>OBs, <span class="at">ref=</span><span class="st">&quot;TKP&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>amakihi<span class="sc">$</span>HAS <span class="ot">&lt;-</span> <span class="fu">relevel</span>(amakihi<span class="sc">$</span>HAS, <span class="at">ref=</span><span class="st">&quot;5&quot;</span>)</span></code></pre></div>
@@ -381,9 +381,6 @@ Knopf, F. L., Sedgwick, J. A., &amp; Cannon, R. W. (1988). Guild structure of a 
 </div>
 <div id="ref-FMARBUC03" class="csl-entry">
 Marques, F. F. C., &amp; Buckland, S. T. (2003). Incorporating covariates into standard line transect analyses. <em>Biometrics</em>, <em>59</em>, 924–935. <a href="https://doi.org/10.1111/j.0006-341x.2003.00107.x">https://doi.org/10.1111/j.0006-341x.2003.00107.x</a>
-</div>
-<div id="ref-marques2007" class="csl-entry">
-Marques, T. A., Thomas, L., Fancy, S. G., &amp; Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. <em>The Auk</em>, <em>124</em>(4), 1229–1243. <a href="https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2">https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2</a>
 </div>
 </div>
 </div>
