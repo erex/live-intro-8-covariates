@@ -37,7 +37,7 @@ Defined as:
 
 $$BIC = -2ln(\mathscr{L}) - k \cdot ln(n)$$
 
-The penalty term changes as a function of sample size; the larger the number of detections, the smaller the effect of the detection function.
+The penalty term changes as a function of sample size; the larger the number of detections, the greater the penalty term.  With a 2 parameter model using AIC, the penalty term would be 4 ($2 \times 2$).  For a model with the the same number of parameters and 80 detections, the penalty term would be 8.8.
 
 # Producing the alternative metrics with the Distance R package
 
