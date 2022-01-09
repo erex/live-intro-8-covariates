@@ -27,7 +27,7 @@ The objectives of this exercise are to
 
 # Covariates in point transect detection functions: Amakihi
 
-In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi *(Hemignathus virens)* is used. This practical is based on the case study in Buckland *et al.* [-@buckland2015] which duplicates the analysis in Marques *et al.* [-@marques2007].
+In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi *(Hemignathus virens)* is used. This practical is based on the case study in @buckland2015 which duplicates the analysis in @Marques2007.
 
 ```{r, echo=T, eval=F}
 library(Distance)
@@ -101,7 +101,7 @@ We would like to treat `OBs` and `HAS` as factor variables as in the original an
 amakihi$HAS <- factor(amakihi$HAS)
 ```
 
-The next adjustment is to change the *reference* level of the *observer* and *hour* factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in Marques *et al.* [-@marques2007]. You would not carry out this step on your own data. By default R uses the first factor level but by using the `relevel` function, this can be changed:
+The next adjustment is to change the *reference* level of the *observer* and *hour* factor covariates - the only reason to do this is to get the estimated parameters in the detection function to match the parameters estimated in @Marques2007. You would not carry out this step on your own data. By default R uses the first factor level but by using the `relevel` function, this can be changed:
 
 ```{r,eval=F}
 # Set the reference level 
