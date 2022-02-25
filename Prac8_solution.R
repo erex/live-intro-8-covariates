@@ -40,7 +40,7 @@ amakihi$HAS <- relevel(amakihi$HAS, ref="5")
 ## ---- fig.height=5, message=FALSE, warning=FALSE----------------------------
 # Fit model selected by Marques et al (2007)
 conv <- convert_units("meter", NULL, "hectare")
-amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
+amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert_units = conv,
                       truncation=82.5)
 
 # Plot selected model
@@ -83,7 +83,7 @@ kable(p_dist_table(amak.hr.obs.mas, bins=seq(0, 0.6, 0.1), proportion = TRUE),
 
 
 ## ----moretrunc, echo=FALSE, eval=TRUE---------------------------------------
-amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv,
+amak.hr.obs.mas.70 <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert_units = conv,
                       truncation=70)
 kable(p_dist_table(amak.hr.obs.mas.70, bins=seq(0, 0.6, 0.1), proportion = TRUE),
       digits = 3,
@@ -187,18 +187,18 @@ conversion.factor <- convert_units("meter", NULL, "hectare")
 # Fit different detection functions, truncation at 55m
 # Half-normal 
 Savannah_sparrow_1980.hn <- ds(data=Savannah_sparrow_1980, key="hn", adjustment="cos", truncation=55,
-                 transect="point", convert.units=conversion.factor)
+                 transect="point", convert_units=conversion.factor)
 # Hazard
 Savannah_sparrow_1980.hr <- ds(data=Savannah_sparrow_1980, key="hr", adjustment="cos", truncation=55,
-                 transect="point", convert.units=conversion.factor)
+                 transect="point", convert_units=conversion.factor)
 
 # Half-normal with pasture covariate
 Savannah_sparrow_1980.hn.region <- ds(data=Savannah_sparrow_1980, key="hn", truncation=55,
-                        transect="point", convert.units=conversion.factor,
+                        transect="point", convert_units=conversion.factor,
                         formula=~Region.Label)
 # Hazard with pasture covariate
 Savannah_sparrow_1980.hr.region <- ds(data=Savannah_sparrow_1980, key="hr", truncation=55,
-                        transect="point", convert.units=conversion.factor,
+                        transect="point", convert_units=conversion.factor,
                         formula=~Region.Label)
 # Select between these models
 AIC(Savannah_sparrow_1980.hn, Savannah_sparrow_1980.hr, Savannah_sparrow_1980.hn.region, Savannah_sparrow_1980.hr.region)
@@ -224,17 +224,17 @@ conversion.factor <- convert_units("meter", NULL, "hectare")
 # Fit alternative models 
 # Half-normal detection function, truncation 55m 
 Savannah_sparrow_1981.hn <- ds(data=Savannah_sparrow_1981, key="hn", adjustment="cos", truncation=55,
-                 transect="point", convert.units=conversion.factor)
+                 transect="point", convert_units=conversion.factor)
 # Hazard rate
 Savannah_sparrow_1981.hr <- ds(data=Savannah_sparrow_1981, key="hr", adjustment="cos", truncation=55,
-                 transect="point", convert.units=conversion.factor)
+                 transect="point", convert_units=conversion.factor)
 # Half normal with pasture
 Savannah_sparrow_1981.hn.region <- ds(data=Savannah_sparrow_1981, key="hn", truncation=55,
-                        transect="point", convert.units=conversion.factor,
+                        transect="point", convert_units=conversion.factor,
                         formula=~Region.Label)
 # Hazard rate with pasture
 Savannah_sparrow_1981.hr.region <- ds(data=Savannah_sparrow_1981, key="hr", truncation=55,
-                        transect="point", convert.units=conversion.factor,
+                        transect="point", convert_units=conversion.factor,
                         formula=~Region.Label)
 # Compare models
 AIC(Savannah_sparrow_1981.hn, Savannah_sparrow_1981.hr, Savannah_sparrow_1981.hn.region, Savannah_sparrow_1981.hr.region)

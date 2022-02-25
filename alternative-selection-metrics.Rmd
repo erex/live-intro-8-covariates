@@ -1,7 +1,7 @@
 ---
 title: Supplement<br>Other model selection metrics
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Introduction to distance sampling<br> January 2022
+date: Introduction to distance sampling<br> April 2022
 output:
   rmdformats::readthedown:
     highlight: tango
@@ -77,13 +77,13 @@ Fit a series of models to the amakihi data set, described in Marques et al. [-@M
 
 ```{r fits, message=FALSE}
 conv <- convert_units("meter", NULL, "hectare")
-amak.hn <- ds(amakihi, transect="point", key="hn", convert.units = conv, truncation=82.5)
-amak.hr <- ds(amakihi, transect="point", key="hr", convert.units = conv, truncation=82.5)
-amak.hr.obs <- ds(amakihi, transect="point", key="hr", formula=~OBs, convert.units = conv, 
+amak.hn <- ds(amakihi, transect="point", key="hn", convert_units = conv, truncation=82.5)
+amak.hr <- ds(amakihi, transect="point", key="hr", convert_units = conv, truncation=82.5)
+amak.hr.obs <- ds(amakihi, transect="point", key="hr", formula=~OBs, convert_units = conv, 
                   truncation=82.5)
-amak.hr.mas <- ds(amakihi, transect="point", key="hr", formula=~MAS, convert.units = conv, 
+amak.hr.mas <- ds(amakihi, transect="point", key="hr", formula=~MAS, convert_units = conv, 
                   truncation=82.5)
-amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert.units = conv, 
+amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS, convert_units = conv, 
                       truncation=82.5)
 results <- data.frame(NULL)
 results <- rbind(results, altmetric(amak.hn))

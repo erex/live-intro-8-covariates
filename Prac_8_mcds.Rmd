@@ -1,7 +1,7 @@
 ---
 title: Exercise 8<br> Covariates in the detection function
 author: Centre for Research into Ecological and Environmental Modelling <br> **University of St Andrews**
-date: Introduction to distance sampling<br> January 2022
+date: Introduction to distance sampling<br> April 2022
 output: 
   rmdformats::readthedown:
     highlight: tango
@@ -129,7 +129,7 @@ Fit a hazard rate model with no covariates or adjustment terms and make a note o
 ```{r, echo=TRUE, eval=F, message=F, warning=F}
 conversion.factor <- convert_units("meter", NULL, "hectare")
 amak.hr <- ds(amakihi, transect="point", key="hr", truncation="10%",
-              adjustment=NULL, convert.units = conversion.factor)
+              adjustment=NULL, convert_units = conversion.factor)
 ```
 
 Make a note of the AIC for this model.
@@ -139,14 +139,14 @@ Now fit a hazard rate model with `OBs` as a covariate in the detection function 
 ```{r, echo=TRUE, eval=F}
 conversion.factor <- convert_units("meter", NULL, "hectare")
 amak.hr.obs <- ds(amakihi, transect="point", key="hr", formula=~OBs,
-                  truncation="10%", convert.units = conversion.factor)
+                  truncation="10%", convert_units = conversion.factor)
 ```
 
 Fit a hazard rate model with `OBs` and `HAS` in the detection function:
 
 ```{r, echo=TRUE, eval=F}
 amak.hr.obs.has <- ds(amakihi, transect="point", key="hr", formula=~OBs+HAS,
-                      truncation="10%", convert.units = conversion.factor)
+                      truncation="10%", convert_units = conversion.factor)
 ```
 
 Try fitting other possible formula and decide which model is best in terms of AIC. To quickly compare AIC values from different models, use the `AIC` command as follows (note only models with the same truncation distance can be compared):
